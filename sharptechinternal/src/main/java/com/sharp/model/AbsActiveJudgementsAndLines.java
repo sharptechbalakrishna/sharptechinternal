@@ -10,6 +10,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "activejudgementsandlines")
 public class AbsActiveJudgementsAndLines {
+	//author balakrishna
 	
 	@Id
 	@GeneratedValue
