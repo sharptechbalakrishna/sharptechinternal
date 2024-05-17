@@ -23,7 +23,7 @@ import com.sharp.repository.VestingDeedInfoRepository;
 @CrossOrigin("http://localhost:3000")
 public class PVController {
 
-	
+	//author updated
 	@Autowired
 	private PropertyInfoRepository propertyinforepository;
 	
