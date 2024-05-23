@@ -20,6 +20,8 @@ import com.sharp.repository.EtGeneralInfoRepository;
 import com.sharp.repository.EtTaxInformationRepositroy;
 import com.sharp.repository.EtVestingInfoRepository;
 
+
+//  This is for ex
 @RestController
 @CrossOrigin("http://localhost:3000")
 public class etGeneralInfoController {
