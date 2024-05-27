@@ -30,10 +30,12 @@ public class Employee implements UserDetails {
 
 	private String firstName;
 	private String middleName;
-	private String lastname;
+	private String lastName;
 
 	private String fatherName;
 	private String motherName;
+	
+
 	private Date dateOfBirth;
 
 	@Column(unique = true)
@@ -52,13 +54,12 @@ public class Employee implements UserDetails {
 	private String address;
 	private String remark;
 	private String role;
-
 	public Employee() {
 		super();
 	}
 
 	public Employee(Long id, String registeredBy, Date registerDate, String empId, int phoneNumber,
-			int alternatePhoneNumber, String firstName, String middleName, String lastname, String fatherName,
+			int alternatePhoneNumber, String firstName, String middleName, String lastName, String fatherName,
 			String motherName, Date dateOfBirth, String email, String password, String joiningDate,
 			String releavingDate, String designation, String salary, String qualification, String panNumber,
 			Long aadhaarNumber, String address, String remark, String role) {
@@ -71,7 +72,7 @@ public class Employee implements UserDetails {
 		this.alternatePhoneNumber = alternatePhoneNumber;
 		this.firstName = firstName;
 		this.middleName = middleName;
-		this.lastname = lastname;
+		this.lastName = lastName;
 		this.fatherName = fatherName;
 		this.motherName = motherName;
 		this.dateOfBirth = dateOfBirth;
@@ -153,12 +154,12 @@ public class Employee implements UserDetails {
 		this.middleName = middleName;
 	}
 
-	public String getLastname() {
-		return lastname;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public String getFatherName() {
@@ -276,6 +277,7 @@ public class Employee implements UserDetails {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

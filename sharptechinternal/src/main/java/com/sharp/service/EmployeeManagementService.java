@@ -33,12 +33,11 @@ public class EmployeeManagementService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
-    private LoginHistoryRepo loginHistoryRepo;
-	
+	private LoginHistoryRepo loginHistoryRepo;
+
 	private static final Logger logger = LoggerFactory.getLogger(EmployeeManagementService.class);
-	
 
 	public ReqRes login(ReqRes loginRequest) {
 		ReqRes response = new ReqRes();
@@ -48,13 +47,13 @@ public class EmployeeManagementService {
 			var user = employeeRepo.findByEmail(loginRequest.getEmail()).orElseThrow();
 			var jwt = jwtUtils.generateToken(user);
 			var refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
-			
+
 			// Save login information
-            LoginHistory loginHistory = new LoginHistory();
-            loginHistory.setEmail(user.getEmail());
-            loginHistory.setLoginTime(new Date(System.currentTimeMillis()));
-            loginHistoryRepo.save(loginHistory);
-			
+			LoginHistory loginHistory = new LoginHistory();
+			loginHistory.setEmail(user.getEmail());
+			loginHistory.setLoginTime(new Date(System.currentTimeMillis()));
+			loginHistoryRepo.save(loginHistory);
+
 			response.setStatusCode(200);
 			response.setToken(jwt);
 			response.setRole(user.getRole());
@@ -68,91 +67,88 @@ public class EmployeeManagementService {
 		}
 		return response;
 	}
-	
-	
+
 	public ReqRes logout(String email) {
-        ReqRes response = new ReqRes();
-        try {
-            var loginHistory = loginHistoryRepo.findTopByEmailOrderBySlNoDesc(email)
-                    .orElseThrow(() -> new Exception("No login record found for email: " + email));
-            loginHistory.setLogoutTime(new Date(System.currentTimeMillis()));
-            loginHistoryRepo.save(loginHistory);
+		ReqRes response = new ReqRes();
+		try {
+			var loginHistory = loginHistoryRepo.findTopByEmailOrderBySlNoDesc(email)
+					.orElseThrow(() -> new Exception("No login record found for email: " + email));
+			loginHistory.setLogoutTime(new Date(System.currentTimeMillis()));
+			loginHistoryRepo.save(loginHistory);
 
-            response.setStatusCode(200);
-            response.setMessage("Successfully Logged Out");
-            logger.info("Logout time updated for email: {}", email);
-        } catch (Exception e) {
-            logger.error("Error during logout for email {}: {}", email, e.getMessage());
-            response.setStatusCode(500);
-            response.setMessage(e.getMessage());
-        }
-        return response;
-    }
+			response.setStatusCode(200);
+			response.setMessage("Successfully Logged Out");
+			logger.info("Logout time updated for email: {}", email);
+		} catch (Exception e) {
+			logger.error("Error during logout for email {}: {}", email, e.getMessage());
+			response.setStatusCode(500);
+			response.setMessage(e.getMessage());
+		}
+		return response;
+	}
 
-	
-
-	
-	
 //	The below commented line for register should be remove after regestering atleast 1 Admin
 	public ReqRes register(ReqRes registrationRequest
-//			, String adminName                
+	// , String adminName
 	) {
-
 		ReqRes resp = new ReqRes();
 
 		try {
+			// Check if empId already exists
+			Optional<Employee> existingUserByEmpId = employeeRepo.findByEmpId(registrationRequest.getEmpId());
+			if (existingUserByEmpId.isPresent()) {
+				resp.setStatusCode(400); // Bad Request
+				resp.setMessage("This empId is already registered with another user.");
+				return resp;
+			}
+
+			// Check if email already exists
+			Optional<Employee> existingUserByEmail = employeeRepo.findByEmail(registrationRequest.getEmail());
+			if (existingUserByEmail.isPresent()) {
+				resp.setStatusCode(400); // Bad Request
+				resp.setMessage("This email is already registered with another user.");
+				return resp;
+			}
 
 			Employee employee = new Employee();
 			employee.setEmail(registrationRequest.getEmail());
 			employee.setRole(registrationRequest.getRole());
 			employee.setFirstName(registrationRequest.getFirstName());
 			employee.setMiddleName(registrationRequest.getMiddleName());
+			employee.setLastName(registrationRequest.getLastName());
 			employee.setEmpId(registrationRequest.getEmpId());
-
-			employee.setLastname(registrationRequest.getLastname());
 			employee.setFatherName(registrationRequest.getFatherName());
 			employee.setMotherName(registrationRequest.getMotherName());
 			employee.setQualification(registrationRequest.getQualification());
-
 			employee.setDateOfBirth(registrationRequest.getDateOfBirth());
 			employee.setPassword(registrationRequest.getPassword());
-
 			employee.setJoiningDate(registrationRequest.getJoiningDate());
 			employee.setReleavingDate(registrationRequest.getReleavingDate());
 			employee.setDesignation(registrationRequest.getDesignation());
-
 			employee.setSalary(registrationRequest.getSalary());
 			employee.setAadhaarNumber(registrationRequest.getAadhaarNumber());
 			employee.setAddress(registrationRequest.getAddress());
-
 			employee.setPanNumber(registrationRequest.getPanNumber());
-
 			employee.setRemark(registrationRequest.getRemark());
-
 			employee.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
-//			employee.setRegisteredBy(adminName);   Remove this commint after creating at lease 1 user
-
 			employee.setRegisterDate(new Date(System.currentTimeMillis()));
-			Employee ourUsersResult = employeeRepo.save(employee);
+//			employee.setRegisteredBy(adminName);
 
-			if (ourUsersResult.getId() > 0) {
+			Employee employeeResult = employeeRepo.save(employee);
 
-				resp.setEmployee((ourUsersResult));
-				resp.setMessage("User Saved Sucessfully");
+			if (employeeResult.getId() > 0) {
+				resp.setEmployee((employeeResult));
+				resp.setMessage("User Saved Successfully");
 				resp.setStatusCode(200);
-
 			}
 
 		} catch (Exception e) {
-
 			resp.setStatusCode(500);
 			resp.setError(e.getMessage());
 		}
 
 		return resp;
-
 	}
-
 
 	public ReqRes refreshToken(ReqRes refreshTokenReqiest) {
 		ReqRes response = new ReqRes();
@@ -255,7 +251,7 @@ public class EmployeeManagementService {
 				existingUser.setEmpId(updatedUser.getEmpId());
 				existingUser.setFirstName(updatedUser.getFirstName());
 				existingUser.setMiddleName(updatedUser.getFirstName());
-				existingUser.setLastname(updatedUser.getLastname());
+				existingUser.setLastName(updatedUser.getLastName());
 				existingUser.setFatherName(updatedUser.getFatherName());
 				existingUser.setMotherName(updatedUser.getMotherName());
 				existingUser.setDesignation(updatedUser.getDesignation());
