@@ -77,7 +77,7 @@ public class etGeneralInfoController {
 	public List<AddressDTO> searchPropertyAddresses(@PathVariable String propertyAddress) {
 	    List<EtGeneralInfo> generalInfoList = etgeneralinforepository.searchByAddress(propertyAddress);
 	    List<AddressDTO> addressDTOList = new ArrayList<>();
-
+	    
 	    if (generalInfoList.isEmpty()) {
 	        // No addresses found
 	        AddressDTO noAddressFound = new AddressDTO();
