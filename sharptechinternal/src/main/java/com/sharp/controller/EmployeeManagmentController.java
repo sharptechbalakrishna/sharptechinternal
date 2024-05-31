@@ -5,7 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,14 +43,10 @@ public class EmployeeManagmentController {
     }
 	
 	// Admin Register
-//	The below commented line for register should be remove after regestering atleast 1 Admin
 	@PostMapping("/auth/register")
-	public ResponseEntity<ReqRes> regeister(@RequestBody ReqRes reg
-//			, @AuthenticationPrincipal UserDetails adminDetails            
-	) {
-//		String adminName = adminDetails.getUsername();
-		return ResponseEntity.ok(employeeManagementService.register(reg
-//				, adminName
+	public ResponseEntity<ReqRes> regeister(@RequestBody ReqRes reg	, @AuthenticationPrincipal UserDetails adminDetails) {
+		String adminEmail = adminDetails.getUsername();
+		return ResponseEntity.ok(employeeManagementService.register(reg, adminEmail
 		));
 	}
 	

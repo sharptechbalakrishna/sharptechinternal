@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sharp.dto.ReqRes;
+import com.sharp.empidgenerator.EmpIdGenerator;
 import com.sharp.model.Employee;
 import com.sharp.model.LoginHistory;
 import com.sharp.repository.EmployeeRepo;
@@ -36,6 +37,9 @@ public class EmployeeManagementService {
 
 	@Autowired
 	private LoginHistoryRepo loginHistoryRepo;
+
+	@Autowired
+	private EmpIdGenerator empIdGenerator;
 
 	private static final Logger logger = LoggerFactory.getLogger(EmployeeManagementService.class);
 
@@ -88,9 +92,7 @@ public class EmployeeManagementService {
 	}
 
 //	The below commented line for register should be remove after regestering atleast 1 Admin
-	public ReqRes register(ReqRes registrationRequest
-	// , String adminName
-	) {
+	public ReqRes register(ReqRes registrationRequest, String adminEmail) {
 		ReqRes resp = new ReqRes();
 
 		try {
@@ -110,13 +112,14 @@ public class EmployeeManagementService {
 				return resp;
 			}
 
+			String newEmpId = empIdGenerator.generateNewEmpId();
 			Employee employee = new Employee();
 			employee.setEmail(registrationRequest.getEmail());
 			employee.setRole(registrationRequest.getRole());
 			employee.setFirstName(registrationRequest.getFirstName());
 			employee.setMiddleName(registrationRequest.getMiddleName());
 			employee.setLastName(registrationRequest.getLastName());
-			employee.setEmpId(registrationRequest.getEmpId());
+			employee.setEmpId(newEmpId);
 			employee.setFatherName(registrationRequest.getFatherName());
 			employee.setMotherName(registrationRequest.getMotherName());
 			employee.setQualification(registrationRequest.getQualification());
@@ -132,7 +135,7 @@ public class EmployeeManagementService {
 			employee.setRemark(registrationRequest.getRemark());
 			employee.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
 			employee.setRegisterDate(new Date(System.currentTimeMillis()));
-//			employee.setRegisteredBy(adminName);
+			employee.setRegisteredBy(adminEmail);
 
 			Employee employeeResult = employeeRepo.save(employee);
 
