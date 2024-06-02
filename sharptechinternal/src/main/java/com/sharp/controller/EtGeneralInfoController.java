@@ -24,7 +24,7 @@ import com.sharp.repository.EtVestingInfoRepository;
 // This is another Comment
 @RestController
 @CrossOrigin("http://localhost:3000")
-public class etGeneralInfoController {
+public class EtGeneralInfoController {
 
 	
 	@Autowired
