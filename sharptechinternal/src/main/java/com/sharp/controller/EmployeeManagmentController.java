@@ -44,10 +44,13 @@ public class EmployeeManagmentController {
 	
 	// Admin Register
 	@PostMapping("/auth/register")
-	public ResponseEntity<ReqRes> regeister(@RequestBody ReqRes reg	, @AuthenticationPrincipal UserDetails adminDetails) {
-		String adminEmail = adminDetails.getUsername();
-		return ResponseEntity.ok(employeeManagementService.register(reg, adminEmail
-		));
+	public ResponseEntity<ReqRes> regeister(@RequestBody ReqRes reg	
+//			, @AuthenticationPrincipal UserDetails adminDetails
+			) {
+//		String adminEmail = adminDetails.getUsername();
+		return ResponseEntity.ok(employeeManagementService.register(reg
+//				, adminEmail
+				));
 	}
 	
 	

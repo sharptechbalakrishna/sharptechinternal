@@ -3,13 +3,16 @@ package com.sharp.service;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -46,9 +49,17 @@ public class EmployeeManagementService {
 	public ReqRes login(ReqRes loginRequest) {
 		ReqRes response = new ReqRes();
 		try {
-			authenticationManager.authenticate(
-					new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-			var user = employeeRepo.findByEmail(loginRequest.getEmail()).orElseThrow();
+	        // Check if the email is registered
+	        Employee user = employeeRepo.findByEmail(loginRequest.getEmail())
+	                                    .orElseThrow(() -> new NoSuchElementException("User not registered"));
+
+	        // Authenticate the user
+	        try {
+	            authenticationManager.authenticate(
+	                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+	        } catch (BadCredentialsException e) {
+	            throw new IllegalArgumentException("Incorrect password");
+	        }
 			var jwt = jwtUtils.generateToken(user);
 			var refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
 
@@ -64,11 +75,18 @@ public class EmployeeManagementService {
 			response.setRefreshToken(refreshToken);
 			response.setExpirationTime("24Hrs");
 			response.setMessage("Successfully Logged In");
+		} catch (NoSuchElementException e) {
+	        response.setStatusCode(404);
+	        response.setMessage("User not registered");
+	    } catch (IllegalArgumentException e) {
+	        response.setStatusCode(401);
+	        response.setMessage("Incorrect password");
+	    } catch (Exception e) {
+	        response.setStatusCode(500);
+	        response.setMessage("An unexpected error occurred: " + e.getMessage());
+	    }
 
-		} catch (Exception e) {
-			response.setStatusCode(500);
-			response.setMessage(e.getMessage());
-		}
+		
 		return response;
 	}
 
@@ -92,17 +110,13 @@ public class EmployeeManagementService {
 	}
 
 //	The below commented line for register should be remove after regestering atleast 1 Admin
-	public ReqRes register(ReqRes registrationRequest, String adminEmail) {
+	public ReqRes register(ReqRes registrationRequest
+//			, String adminEmail
+			) {
 		ReqRes resp = new ReqRes();
 
 		try {
-			// Check if empId already exists
-			Optional<Employee> existingUserByEmpId = employeeRepo.findByEmpId(registrationRequest.getEmpId());
-			if (existingUserByEmpId.isPresent()) {
-				resp.setStatusCode(400); // Bad Request
-				resp.setMessage("This empId is already registered with another user.");
-				return resp;
-			}
+			
 
 			// Check if email already exists
 			Optional<Employee> existingUserByEmail = employeeRepo.findByEmail(registrationRequest.getEmail());
@@ -135,7 +149,7 @@ public class EmployeeManagementService {
 			employee.setRemark(registrationRequest.getRemark());
 			employee.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
 			employee.setRegisterDate(new Date(System.currentTimeMillis()));
-			employee.setRegisteredBy(adminEmail);
+//			employee.setRegisteredBy(adminEmail);
 
 			Employee employeeResult = employeeRepo.save(employee);
 
@@ -251,7 +265,7 @@ public class EmployeeManagementService {
 			if (userOptional.isPresent()) {
 				Employee existingUser = userOptional.get();
 				existingUser.setEmail(updatedUser.getEmail());
-				existingUser.setEmpId(updatedUser.getEmpId());
+//				existingUser.setEmpId(updatedUser.getEmpId());
 				existingUser.setFirstName(updatedUser.getFirstName());
 				existingUser.setMiddleName(updatedUser.getFirstName());
 				existingUser.setLastName(updatedUser.getLastName());
@@ -270,10 +284,10 @@ public class EmployeeManagementService {
 				existingUser.setRole(updatedUser.getRole());
 
 				// Check if password is present in the request
-				if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
-					// Encode the password and update it
-					existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
-				}
+//				if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+//					// Encode the password and update it
+//					existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+//				}
 
 				Employee savedUser = employeeRepo.save(existingUser);
 				reqRes.setEmployee(savedUser);
