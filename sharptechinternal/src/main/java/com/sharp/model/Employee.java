@@ -25,8 +25,8 @@ public class Employee implements UserDetails {
 	@Column(unique = true)
 	private String empId;
 
-	private int phoneNumber;
-	private int alternatePhoneNumber;
+	private Long phoneNumber;
+	private Long alternatePhoneNumber;
 
 	private String firstName;
 	private String middleName;
@@ -34,7 +34,6 @@ public class Employee implements UserDetails {
 
 	private String fatherName;
 	private String motherName;
-	
 
 	private Date dateOfBirth;
 
@@ -53,13 +52,15 @@ public class Employee implements UserDetails {
 
 	private String address;
 	private String remark;
-	private String role;
+	
+	
+
 	public Employee() {
 		super();
 	}
 
-	public Employee(Long id, String registeredBy, Date registerDate, String empId, int phoneNumber,
-			int alternatePhoneNumber, String firstName, String middleName, String lastName, String fatherName,
+	public Employee(Long id, String registeredBy, Date registerDate, String empId, Long phoneNumber,
+			Long alternatePhoneNumber, String firstName, String middleName, String lastName, String fatherName,
 			String motherName, Date dateOfBirth, String email, String password, String joiningDate,
 			String releavingDate, String designation, String salary, String qualification, String panNumber,
 			Long aadhaarNumber, String address, String remark, String role) {
@@ -122,19 +123,19 @@ public class Employee implements UserDetails {
 		this.empId = empId;
 	}
 
-	public int getPhoneNumber() {
+	public Long getPhoneNumber() {
 		return phoneNumber;
 	}
 
-	public void setPhoneNumber(int phoneNumber) {
+	public void setPhoneNumber(Long phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public int getAlternatePhoneNumber() {
+	public Long getAlternatePhoneNumber() {
 		return alternatePhoneNumber;
 	}
 
-	public void setAlternatePhoneNumber(int alternatePhoneNumber) {
+	public void setAlternatePhoneNumber(Long alternatePhoneNumber) {
 		this.alternatePhoneNumber = alternatePhoneNumber;
 	}
 
@@ -277,7 +278,8 @@ public class Employee implements UserDetails {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
+	private String role;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

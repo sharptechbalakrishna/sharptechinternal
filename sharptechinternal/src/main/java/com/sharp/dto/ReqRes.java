@@ -29,8 +29,8 @@ public class ReqRes {
 
 	private String empId;
 
-	private int phoneNumber;
-	private int alternatePhoneNumber;
+	private Long phoneNumber;
+	private Long alternatePhoneNumber;
 
 	private String firstName;
 	private String middleName;
@@ -140,19 +140,19 @@ public class ReqRes {
 		this.empId = empId;
 	}
 
-	public int getPhoneNumber() {
+	public Long getPhoneNumber() {
 		return phoneNumber;
 	}
 
-	public void setPhoneNumber(int phoneNumber) {
+	public void setPhoneNumber(Long phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public int getAlternatePhoneNumber() {
+	public Long getAlternatePhoneNumber() {
 		return alternatePhoneNumber;
 	}
 
-	public void setAlternatePhoneNumber(int alternatePhoneNumber) {
+	public void setAlternatePhoneNumber(Long alternatePhoneNumber) {
 		this.alternatePhoneNumber = alternatePhoneNumber;
 	}
 
@@ -315,6 +315,7 @@ public class ReqRes {
 	public void setEmployeeList(List<Employee> employeeList) {
 		this.employeeList = employeeList;
 	}
+
 
 	
 }

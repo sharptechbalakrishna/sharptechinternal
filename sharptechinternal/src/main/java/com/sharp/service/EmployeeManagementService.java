@@ -129,6 +129,10 @@ public class EmployeeManagementService {
 			String newEmpId = empIdGenerator.generateNewEmpId();
 			Employee employee = new Employee();
 			employee.setEmail(registrationRequest.getEmail());
+			
+			employee.setPhoneNumber(registrationRequest.getPhoneNumber());
+			employee.setAlternatePhoneNumber(registrationRequest.getAlternatePhoneNumber());
+
 			employee.setRole(registrationRequest.getRole());
 			employee.setFirstName(registrationRequest.getFirstName());
 			employee.setMiddleName(registrationRequest.getMiddleName());
@@ -265,6 +269,11 @@ public class EmployeeManagementService {
 			if (userOptional.isPresent()) {
 				Employee existingUser = userOptional.get();
 				existingUser.setEmail(updatedUser.getEmail());
+				
+				existingUser.setPhoneNumber(updatedUser.getPhoneNumber());
+				existingUser.setAlternatePhoneNumber(updatedUser.getAlternatePhoneNumber());
+
+				
 //				existingUser.setEmpId(updatedUser.getEmpId());
 				existingUser.setFirstName(updatedUser.getFirstName());
 				existingUser.setMiddleName(updatedUser.getFirstName());
