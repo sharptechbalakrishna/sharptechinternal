@@ -19,5 +19,7 @@ public interface EmployeeRepo extends JpaRepository<Employee, Long> {
 	
 	@Query(value = "SELECT emp_id FROM employee ORDER BY emp_id DESC LIMIT 1", nativeQuery = true)
     String findLatestEmpId();
+	
+	 boolean existsByEmail(String email);
 
 }
