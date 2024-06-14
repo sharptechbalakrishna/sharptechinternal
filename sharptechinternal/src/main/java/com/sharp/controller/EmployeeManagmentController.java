@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sharp.dto.LogoutRequest;
+import com.sharp.dto.OtpVerificationRequest;
 import com.sharp.dto.ReqRes;
 import com.sharp.model.Employee;
 import com.sharp.service.EmployeeManagementService;
@@ -34,12 +36,22 @@ public class EmployeeManagmentController {
     public ResponseEntity<ReqRes> login(@RequestBody ReqRes req) {
         return ResponseEntity.ok(employeeManagementService.login(req));
     }
+//	@PostMapping("/auth/login")
+//    public ResponseEntity<ReqRes> login(@RequestBody ReqRes loginRequest) {
+//        ReqRes response = employeeManagementService.login(loginRequest);
+//        return ResponseEntity.status(response.getStatusCode()).body(response);
+//    }
+	
+	 @PostMapping("/auth/verify-otp")
+	    public ResponseEntity<ReqRes> verifyOtp(@RequestBody OtpVerificationRequest otpRequest) {
+		 return ResponseEntity.ok(employeeManagementService.verifyOtp(otpRequest.getEmail(), otpRequest.getOtp()));
+	    }
 	
 	// Logout 
 	@PostMapping("/auth/logout")
-    public ResponseEntity<ReqRes> logout(@RequestBody ReqRes req) {
+    public ResponseEntity<ReqRes> logout(@RequestBody LogoutRequest req) {
         logger.info("Logout request received for email: {}", req.getEmail());
-        return ResponseEntity.ok(employeeManagementService.logout(req.getEmail()));
+        return ResponseEntity.ok(employeeManagementService.logout(req.getEmail(), req.getTransactionId()));
     }
 	
 	// Admin Register
@@ -54,9 +66,6 @@ public class EmployeeManagmentController {
 	}
 	
 	
-
-
-
 	@PostMapping("/auth/refresh")
 	public ResponseEntity<ReqRes> refreshToken(@RequestBody ReqRes req) {
 		return ResponseEntity.ok(employeeManagementService.refreshToken(req));

@@ -1,18 +1,22 @@
 package com.sharp.service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sharp.dto.ReqRes;
+import com.sharp.model.LoginOtp;
 import com.sharp.model.Otp;
 import com.sharp.repository.EmployeeRepo;
+import com.sharp.repository.LoginOtpRepository;
 import com.sharp.repository.OtpRepository;
+
+import jakarta.transaction.Transactional;
 
 
 @Service
@@ -26,9 +30,12 @@ public class OtpService {
     
     @Autowired
     private EmployeeRepo employeeRepo;
-
-
     
+    @Autowired
+    private LoginOtpRepository loginOtpRepository;
+
+
+    // This method is use for the generating otp for the resetpassword
     public ReqRes generateAndSendOtp(String email) {
         ReqRes response = new ReqRes();
         try {
@@ -70,7 +77,7 @@ public class OtpService {
     }
     
 
-    
+    // Validatign the otp for the forget password
     public boolean validateOtp(String email, String otp) {
         Optional<Otp> otpEntity = otpRepository.findByEmailAndOtp(email, otp);
         if (otpEntity.isPresent() && otpEntity.get().getExpiryDate().after(new Date())) {
@@ -78,6 +85,47 @@ public class OtpService {
             return true;
         }
         return false;
+    }
+    
+    
+    // Generating the otp for the login 
+    public String generateOtp(String email) {
+        // Generate OTP (e.g., a random 6-digit number)
+        String otp = String.valueOf(new Random().nextInt(900000) + 100000);
+        
+        // Set expiration time to 5 minutes from now
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE, 5);
+        Date expirationTime = calendar.getTime();
+
+        // Check if an OTP already exists for this email
+        Optional<LoginOtp> existingOtpOpt = loginOtpRepository.findByEmail(email);
+        if (existingOtpOpt.isPresent()) {
+            // If OTP exists, update it
+            LoginOtp existingOtp = existingOtpOpt.get();
+            existingOtp.setOtp(otp);
+            existingOtp.setExpirationTime(expirationTime);
+            loginOtpRepository.save(existingOtp);
+        } else {
+            // If OTP does not exist, create a new one
+            LoginOtp loginOtp = new LoginOtp();
+            loginOtp.setEmail(email);
+            loginOtp.setOtp(otp);
+            loginOtp.setExpirationTime(expirationTime);
+            loginOtpRepository.save(loginOtp);
+        }
+
+        return otp;
+    }
+    
+
+    public Optional<LoginOtp> getOtp(String email) {
+        return loginOtpRepository.findByEmail(email);
+    }
+    
+    @Transactional
+    public void deleteOtp(String email) {
+        loginOtpRepository.deleteByEmail(email);
     }
 
 }

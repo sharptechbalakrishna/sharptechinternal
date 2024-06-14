@@ -55,10 +55,13 @@ public class ReqRes {
 	private String address;
 	private String remark;
 	private String role;
+	private String transactionId;
 
 	private Employee employee;
 
 	private List<Employee> employeeList;
+	
+	
 
 	public int getStatusCode() {
 		return statusCode;
@@ -300,6 +303,14 @@ public class ReqRes {
 		this.role = role;
 	}
 
+	public String getTransactionId() {
+		return transactionId;
+	}
+
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
+	}
+
 	public Employee getEmployee() {
 		return employee;
 	}
@@ -315,7 +326,8 @@ public class ReqRes {
 	public void setEmployeeList(List<Employee> employeeList) {
 		this.employeeList = employeeList;
 	}
-
-
 	
-}
+	
+	
+
+	}
