@@ -251,6 +251,10 @@ public class PropertyInfo {
 	public void setTaxinstallments(List<TaxInfo> taxinstallments) {
 		this.taxinstallments = taxinstallments;
 	}
+
+	
+
+	
 	
 	
 	

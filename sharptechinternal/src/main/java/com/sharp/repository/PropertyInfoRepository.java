@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.sharp.model.EtGeneralInfo;
 import com.sharp.model.PropertyInfo;
 
 //@Repository
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
+
 public interface PropertyInfoRepository extends JpaRepository<PropertyInfo, String> {
 
     @Query("SELECT e FROM PropertyInfo e INNER JOIN FETCH e.vestingdeedinfo v WHERE e.propertyAddress = :propertyAddress")
@@ -35,7 +37,15 @@ public interface PropertyInfoRepository extends JpaRepository<PropertyInfo, Stri
     
     @Query("SELECT p FROM PropertyInfo p JOIN FETCH p.absopenmortgagedeedinfo m WHERE p.propertyAddress = :propertyAddress")
     List<PropertyInfo> findByPropertyAddressWithOpenMortgageDeedInfo(@Param("propertyAddress") String propertyAddress);
-    
+
+	//List<PropertyInfo> searchByAddress(String propertyAddress);
+	
+//	 @Query("SELECT e FROM PropertyInfo e WHERE e.propertyAddress LIKE %:partialAddress%")
+//	    List<PropertyInfo> searchByAddress(@Param("propertyAddress") String propertyAddress);
+//    
+	 
+    @Query("SELECT e FROM PropertyInfo e WHERE e.propertyAddress LIKE %:partialAddress%")
+    List<PropertyInfo> searchByAddress(@Param("partialAddress") String partialAddress);
     
 }
 

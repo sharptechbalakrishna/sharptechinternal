@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sharp.dto.AddressDTO;
+import com.sharp.dto.DasAddressDto;
 import com.sharp.dto.PVRequest;
 import com.sharp.model.EtGeneralInfo;
 import com.sharp.model.PropertyInfo;
@@ -90,7 +92,56 @@ public class PVController {
 	        // For now, just return the first list
 	        return list1;
 	    }
+	    @Autowired
+	    private PropertyInfoRepository propertyInfoRepository;
+
+	    @GetMapping("/partial/Addresssearch/{propertyAddress}")
+	    public List<DasAddressDto> searchPropertyAddresses(@PathVariable String propertyAddress) {
+	        List<PropertyInfo> generalInfoList = propertyinforepository.searchByAddress(propertyAddress);
+	        List<DasAddressDto> addressDTOList = new ArrayList<>();
+
+	        if (generalInfoList.isEmpty()) {
+	            // No addresses found
+	            DasAddressDto noAddressFound = new DasAddressDto();
+	            noAddressFound.setPropertyAddress("No addresses found for: " + propertyAddress);
+	            addressDTOList.add(noAddressFound);
+	        } else {
+	            // Addresses found
+	            for (PropertyInfo info : generalInfoList) {
+	                DasAddressDto dto = new DasAddressDto();
+	                dto.setPropertyAddress(info.getPropertyAddress());
+	                dto.setOrderNumber(info.getOrderNumber());
+	                addressDTOList.add(dto);
+	            }
+	        }
+
+	        return addressDTOList;
+	    }
+
+	
 	    
+//	    @GetMapping("/partial/search/{propertyAddress}")
+//		public List<AddressDTO> searchPropertyAddresses(@PathVariable String propertyAddress) {
+//		    List<EtGeneralInfo> generalInfoList = etgeneralinforepository.searchByAddress(propertyAddress);
+//		    List<AddressDTO> addressDTOList = new ArrayList<>();
+//		    
+//		    if (generalInfoList.isEmpty()) {
+//		        // No addresses found
+//		        AddressDTO noAddressFound = new AddressDTO();
+//		        noAddressFound.setAddress("No addresses found for: " + propertyAddress);
+//		        addressDTOList.add(noAddressFound);
+//		    } else {
+//		        // Addresses found
+//		        for (EtGeneralInfo info : generalInfoList) {
+//		            AddressDTO dto = new AddressDTO();
+//		            dto.setAddress(info.getPropertyAdderess());
+//		            dto.setOrderNumber(info.getOrderNumber());
+//		            addressDTOList.add(dto);
+//		        }
+//		    }
+//
+//		    return addressDTOList;
+//		}	
 	    
 //	    @GetMapping("/display/byAddress/{propertyAddress}")
 //		public ResponseEntity<List<PropertyInfo>> etDisplayByPropertyAddressWithChildDetails(@PathVariable String propertyAddress) {
