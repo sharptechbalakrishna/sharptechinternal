@@ -120,115 +120,38 @@ public class PVController {
 
 	
 	    
-//	    @GetMapping("/partial/search/{propertyAddress}")
-//		public List<AddressDTO> searchPropertyAddresses(@PathVariable String propertyAddress) {
-//		    List<EtGeneralInfo> generalInfoList = etgeneralinforepository.searchByAddress(propertyAddress);
-//		    List<AddressDTO> addressDTOList = new ArrayList<>();
-//		    
-//		    if (generalInfoList.isEmpty()) {
-//		        // No addresses found
-//		        AddressDTO noAddressFound = new AddressDTO();
-//		        noAddressFound.setAddress("No addresses found for: " + propertyAddress);
-//		        addressDTOList.add(noAddressFound);
-//		    } else {
-//		        // Addresses found
-//		        for (EtGeneralInfo info : generalInfoList) {
-//		            AddressDTO dto = new AddressDTO();
-//		            dto.setAddress(info.getPropertyAdderess());
-//		            dto.setOrderNumber(info.getOrderNumber());
-//		            addressDTOList.add(dto);
-//		        }
-//		    }
-//
-//		    return addressDTOList;
-//		}	
-	    
-//	    @GetMapping("/display/byAddress/{propertyAddress}")
-//		public ResponseEntity<List<PropertyInfo>> etDisplayByPropertyAddressWithChildDetails(@PathVariable String propertyAddress) {
-//		    List<PropertyInfo> generalInfoListWithVestingInfo = propertyinforepository.findByPropertyAddressWithVestingInfo(propertyAddress);
-//		    List<PropertyInfo> generalInfoListWithOpenMortageDeedInfo = propertyinforepository.findByPropertyAddressWithOpenMortageDeedInfo(propertyAddress);
-//		    
-//		    // Merge or process the lists of results as needed
-//		    
-//		    List<EtGeneralInfo> mergedList = mergeLists(generalInfoListWithVestingInfo, generalInfoListWithOpenMortageDeedInfo);
-//		    
-//		    return ResponseEntity.status(HttpStatus.OK).body(mergedList);
-//		}
-	
-	//return userRepository.findById(empId)
-	//.orElseThrow(()->new UserNotFoundException(empId));
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-//	@PostMapping("/insert")
-//	public ETGeneralInfo insert(@RequestBody EtRequest request) {
-//	    // Save etgeneralinfo
-//	    ETGeneralInfo savedGeneralInfo = etgeneralinforepository.save(request.getEtgeneralinfo());
-//	    
-//	    // Save etvestinginfo
-//	    List<EtVestingInfo> vestingInfoList = request.getEtvestinginfo();
-//	    if (vestingInfoList != null && !vestingInfoList.isEmpty()) {
-//	        for (EtVestingInfo vestingInfo : vestingInfoList) {
-//	            vestingInfo.setGeneralInfo(savedGeneralInfo); // Set the reference to etgeneralinfo
-//	            etvestinginforepository.save(vestingInfo);
-//	        }
-//	    }
-//	    
-//	    return savedGeneralInfo;
-//	}
-	
-	
-	
-//	@PostMapping("/insert")
-//    public void insertEtGeneralInfoAndVestingInfo(@RequestBody EtGeneralInfoAndVestingInfoRequest request) {
-//        // Save EtGeneralInfo
-//        ETGeneralInfo etGeneralInfo = request.getEtGeneralInfo();
-//        String orderNumber = etGeneralInfo.getOrderNumber();
-//        System.out.println("Order Number from EtGeneralInfo: " + orderNumber);
-//        etGeneralInfo.setOrderNumber(orderNumber);
-//        etgeneralinforepository.save(etGeneralInfo);
-//
-//        // Save EtVestingInfo
-//        List<EtVestingInfo> etVestingInfoList = request.getEtVestingInfoList();
-//        for (EtVestingInfo etVestingInfo : etVestingInfoList) {
-//            etVestingInfo.setETGeneralInfo(etGeneralInfo); // Set the relationship
-// //           System.out.println("Order Number set in EtVestingInfo: " + etVestingInfo.getOrderNumber());
-//           
-//            etvestinginforepository.save(etVestingInfo);
-//        }
-//    }
-
 }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
