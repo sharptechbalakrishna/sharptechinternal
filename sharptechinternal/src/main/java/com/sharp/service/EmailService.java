@@ -33,7 +33,7 @@ public class EmailService {
 	public void sendOtp(String email, String otp) {
 
 		SimpleMailMessage message = new SimpleMailMessage();
-		message.setTo("sharptechshravankumar@gmail.com");
+		message.setTo("orders@etracktitle.com");
 		message.setSubject("Login Verification - OTP Enclosed");
 
 		String emailContent = "Dear Admin,\n\n" 
