@@ -64,8 +64,13 @@ public class PropertyInfo {
 	@JoinColumn(name = "orderNumber", referencedColumnName = "orderNumber")
 	private List<TaxInfo> taxinstallments;
 	
+	@OneToMany(targetEntity = DasAdditionalInfo.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "orderNumber", referencedColumnName = "orderNumber")
+	private List<DasAdditionalInfo> dasadditionalinformation;
+	
 	
 
+	
 	public PropertyInfo() {
 		super();
 	}
@@ -74,7 +79,7 @@ public class PropertyInfo {
 			String propertyAddress, String state, String county, String borrowerName, String lotUnit, String block,
 			String subdivision, String parcelNumber, String propertyType, List<VestingDeedInfo> vestingdeedinfo
 			,List<AbsActiveJudgementsAndLines> absActiveJudgementsAndLines,List<OpenMortgageDeddInfo> absopenmortgagedeedinfo,List<AssessementsAndTaxInfo> assessementsAndTaxInfo
-			,List<NamesRun> namesrun,List<TaxInfo> taxinstallments) {
+			,List<NamesRun> namesrun,List<TaxInfo> taxinstallments, List<DasAdditionalInfo> dasadditionalinformation) {
 		//List<TaxInfo> taxinstallments
 		super();
 		this.orderNumber = orderNumber;
@@ -252,7 +257,14 @@ public class PropertyInfo {
 		this.taxinstallments = taxinstallments;
 	}
 
-	
+	public List<DasAdditionalInfo> getDasadditionalinformation() {
+		return dasadditionalinformation;
+	}
+
+	public void setDasadditionalinformation(List<DasAdditionalInfo> dasadditionalinformation) {
+		this.dasadditionalinformation = dasadditionalinformation;
+	}
+
 
 	
 	

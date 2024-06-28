@@ -62,7 +62,9 @@ public class EtGeneralInfo {
 	@JoinColumn(name="orderNumber", referencedColumnName="orderNumber")
 	private List<EtTaxInstallment> ettaxinstallment;
 
-	
+	@OneToMany(targetEntity = EtAdditionalInfo.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name="orderNumber", referencedColumnName="orderNumber")
+	private List<EtAdditionalInfo> etadditionalinformation;
 	
 	
 	
@@ -75,7 +77,7 @@ public class EtGeneralInfo {
 			String lotUnit, String block, String sfrPudCondo, byte[] document, List<EtVestingInfo> etvestinginfo,
 			List<EtOpenMortageDeedInfo> etopenmortagedeedinfo,
 			List<EtActiveJudgmentsAndLiens> etactivejudgmentsandliens, List<EtTaxInformation> ettaxinformation,
-			List<EtNameRuns> etnameruns, List<EtTaxInstallment> ettaxinstallment) {
+			List<EtNameRuns> etnameruns, List<EtTaxInstallment> ettaxinstallment,List<EtAdditionalInfo> etadditionalinformation) {
 		super();
 		this.orderNumber = orderNumber;
 		this.refeenceNumber = refeenceNumber;
@@ -248,6 +250,14 @@ public class EtGeneralInfo {
 
 	public void setEttaxinstallment(List<EtTaxInstallment> ettaxinstallment) {
 		this.ettaxinstallment = ettaxinstallment;
+	}
+
+	public List<EtAdditionalInfo> getEtadditionalinformation() {
+		return etadditionalinformation;
+	}
+
+	public void setEtadditionalinformation(List<EtAdditionalInfo> etadditionalinformation) {
+		this.etadditionalinformation = etadditionalinformation;
 	}
 
 	

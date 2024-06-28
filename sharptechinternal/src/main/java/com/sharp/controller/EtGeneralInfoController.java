@@ -2,6 +2,7 @@ package com.sharp.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sharp.dto.AddressDTO;
+import com.sharp.dto.EtInsertResponse;
 import com.sharp.dto.EtRequest;
 import com.sharp.model.EtGeneralInfo;
 import com.sharp.repository.EtGeneralInfoRepository;
@@ -38,11 +40,41 @@ public class EtGeneralInfoController {
 	
 
 	
+	public EtGeneralInfoController(EtGeneralInfoRepository etgeneralinforepository) {
+        this.etgeneralinforepository = etgeneralinforepository;
+    }
+ 
+	
 	@PostMapping("/etinsert")
-	public  EtGeneralInfo insert(@RequestBody EtRequest request) {
-		
-		return etgeneralinforepository.save(request.getEtgeneralinfo());
-	}
+    public ResponseEntity<EtInsertResponse> insert(@RequestBody EtRequest request) {
+		EtInsertResponse resp = new EtInsertResponse();
+        try {
+            String orderNumber = request.getEtgeneralinfo().getOrderNumber();
+            Optional<EtGeneralInfo> existingData = etgeneralinforepository.findById(orderNumber);
+            
+            if (existingData.isPresent()) {
+                resp.setMessage("Order number already exists. Data not saved.");
+                resp.setStatusCode(400);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resp);
+            }
+
+            EtGeneralInfo savedData = etgeneralinforepository.save(request.getEtgeneralinfo());
+            if (savedData != null) {
+                resp.setData(savedData);
+                resp.setMessage("Data stored successfully.");
+                resp.setStatusCode(200);
+            } else {
+                resp.setMessage("Failed to store data.");
+                resp.setStatusCode(500);
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(resp);
+        } catch (Exception e) {
+            resp.setStatusCode(500);
+            resp.setMessage("An error occurred: " + e.getMessage());
+            resp.setError(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resp);
+        }
+    }
 	
 	
 
