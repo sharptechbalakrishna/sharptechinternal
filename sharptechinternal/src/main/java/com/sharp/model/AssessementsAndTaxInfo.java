@@ -14,7 +14,8 @@ public class AssessementsAndTaxInfo {
 	@Id
 	@GeneratedValue
 	private Long slno;
-	private Date taxYear;
+	private String selectedTaxYear;
+	private String assementYear;
 	private String landValue;
 	private String buildingValue;
 	private String extraValue;
@@ -28,17 +29,7 @@ public class AssessementsAndTaxInfo {
 		super();
 	}
 
-	public AssessementsAndTaxInfo(Long slno, Date taxYear, String landValue, String buildingValue, String extraValue,
-			String totalValue, String comments) {
-		super();
-		this.slno = slno;
-		this.taxYear = taxYear;
-		this.landValue = landValue;
-		this.buildingValue = buildingValue;
-		this.extraValue = extraValue;
-		this.totalValue = totalValue;
-		this.comments = comments;
-	}
+	
 
 	public Long getSlno() {
 		return slno;
@@ -48,12 +39,26 @@ public class AssessementsAndTaxInfo {
 		this.slno = slno;
 	}
 
-	public Date getTaxYear() {
-		return taxYear;
+
+	public AssessementsAndTaxInfo(Long slno, String selectedTaxYear, String assementYear, String landValue,
+			String buildingValue, String extraValue, String totalValue, String comments) {
+		super();
+		this.slno = slno;
+		this.selectedTaxYear = selectedTaxYear;
+		this.assementYear = assementYear;
+		this.landValue = landValue;
+		this.buildingValue = buildingValue;
+		this.extraValue = extraValue;
+		this.totalValue = totalValue;
+		this.comments = comments;
 	}
 
-	public void setTaxYear(Date taxYear) {
-		this.taxYear = taxYear;
+	public String getSelectedTaxYear() {
+		return selectedTaxYear;
+	}
+
+	public void setSelectedTaxYear(String selectedTaxYear) {
+		this.selectedTaxYear = selectedTaxYear;
 	}
 
 	public String getLandValue() {
@@ -94,6 +99,14 @@ public class AssessementsAndTaxInfo {
 
 	public void setComments(String comments) {
 		this.comments = comments;
+	}
+
+	public String getAssementYear() {
+		return assementYear;
+	}
+
+	public void setAssementYear(String assementYear) {
+		this.assementYear = assementYear;
 	}
 
 }

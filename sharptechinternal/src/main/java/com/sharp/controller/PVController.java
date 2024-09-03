@@ -1,6 +1,7 @@
 package com.sharp.controller;
 
 import java.util.Optional;
+import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -118,7 +120,40 @@ public class PVController {
 	        return addressDTOList;
 	    }
 
-	
+//	    @PutMapping("/update")
+//	    public PropertyInfo updatePropertyInfo(@RequestBody PVRequest request) {
+//	        PropertyInfo propertyInfo = request.getPropertyinfo();
+//	        
+//	        // Check if the PropertyInfo exists
+//	        PropertyInfo existingPropertyInfo = propertyInfoRepository.findById(propertyInfo.getOrderNumber())
+//	                .orElseThrow(() -> new ResourceNotFoundException("PropertyInfo not found with orderNumber: " + propertyInfo.getOrderNumber()));
+//
+//	        // Update existingPropertyInfo with new values from the request
+//	        existingPropertyInfo.setReferenceNumber(propertyInfo.getReferenceNumber());
+//	        existingPropertyInfo.setSearchDate(propertyInfo.getSearchDate());
+//	        existingPropertyInfo.setEffectiveDate(propertyInfo.getEffectiveDate());
+//	        existingPropertyInfo.setPropertyAddress(propertyInfo.getPropertyAddress());
+//	        existingPropertyInfo.setState(propertyInfo.getState());
+//	        existingPropertyInfo.setCounty(propertyInfo.getCounty());
+//	        existingPropertyInfo.setBorrowerName(propertyInfo.getBorrowerName());
+//	        existingPropertyInfo.setLotUnit(propertyInfo.getLotUnit());
+//	        existingPropertyInfo.setBlock(propertyInfo.getBlock());
+//	        existingPropertyInfo.setSubdivision(propertyInfo.getSubdivision());
+//	        existingPropertyInfo.setParcelNumber(propertyInfo.getParcelNumber());
+//	        existingPropertyInfo.setPropertyType(propertyInfo.getPropertyType());
+//
+//	        // Handle the related entities similarly
+//	        existingPropertyInfo.setVestingdeedinfo(propertyInfo.getVestingdeedinfo());
+//	        existingPropertyInfo.setAbsActiveJudgementsAndLines(propertyInfo.getAbsActiveJudgementsAndLines());
+//	        existingPropertyInfo.setAbsopenmortgagedeedinfo(propertyInfo.getAbsopenmortgagedeedinfo());
+//	        existingPropertyInfo.setAssessementsAndTaxInfo(propertyInfo.getAssessementsAndTaxInfo());
+//	        existingPropertyInfo.setNamesrun(propertyInfo.getNamesrun());
+//	        existingPropertyInfo.setTaxinstallments(propertyInfo.getTaxinstallments());
+//	        existingPropertyInfo.setDasadditionalinformation(propertyInfo.getDasadditionalinformation());
+//
+//	        // Save and return the updated entity
+//	        return propertyInfoRepository.save(existingPropertyInfo);
+//	    }
 	    
 }
 	

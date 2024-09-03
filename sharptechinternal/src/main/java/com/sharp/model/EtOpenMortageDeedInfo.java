@@ -26,9 +26,9 @@ public class EtOpenMortageDeedInfo {
     private Date recordedDate;
     private Date maturityDate;
     private String mortageAssiTo;
-    private Long assiBkPg;
+    private String assiBkPg;
     private Date assiDated;
-    private String assiRecorded;
+    private Date assiRecorded;
     private String additionalInformation;
     private Integer indicator;
     
@@ -38,8 +38,8 @@ public class EtOpenMortageDeedInfo {
 		super();
 	}
 	public EtOpenMortageDeedInfo(Long slNo, String mortgago, String mortgagee, String trustee, String instBookPage,
-			String amount, Date datedDate, Date recordedDate, Date maturityDate, String mortageAssiTo, Long assiBkPg,
-			Date assiDated, String assiRecorded, String additionalInformation, Integer indicator) {
+			String amount, Date datedDate, Date recordedDate, Date maturityDate, String mortageAssiTo, String assiBkPg,
+			Date assiDated, Date assiRecorded, String additionalInformation, Integer indicator) {
 		super();
 		this.slNo = slNo;
 		this.mortgago = mortgago;
@@ -117,10 +117,10 @@ public class EtOpenMortageDeedInfo {
 	public void setMortageAssiTo(String mortageAssiTo) {
 		this.mortageAssiTo = mortageAssiTo;
 	}
-	public Long getAssiBkPg() {
+	public String getAssiBkPg() {
 		return assiBkPg;
 	}
-	public void setAssiBkPg(Long assiBkPg) {
+	public void setAssiBkPg(String assiBkPg) {
 		this.assiBkPg = assiBkPg;
 	}
 	public Date getAssiDated() {
@@ -129,10 +129,10 @@ public class EtOpenMortageDeedInfo {
 	public void setAssiDated(Date assiDated) {
 		this.assiDated = assiDated;
 	}
-	public String getAssiRecorded() {
+	public Date getAssiRecorded() {
 		return assiRecorded;
 	}
-	public void setAssiRecorded(String assiRecorded) {
+	public void setAssiRecorded(Date assiRecorded) {
 		this.assiRecorded = assiRecorded;
 	}
 	public String getAdditionalInformation() {

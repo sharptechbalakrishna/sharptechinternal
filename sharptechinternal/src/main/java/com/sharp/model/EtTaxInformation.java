@@ -19,6 +19,8 @@ public class EtTaxInformation {
 	@GeneratedValue
 	private Long slNo;
 	private String landValue;
+	public String assementYear;
+	public String taxYear;
 	private String buildingValue;
 	private String totalValue;
 	private String excemption;
@@ -30,8 +32,9 @@ public class EtTaxInformation {
 	public EtTaxInformation() {
 		super();
 	}
+	
 	public EtTaxInformation(Long slNo, String landValue, String buildingValue, String totalValue, String excemption,
-			String notes) {
+			String notes,String assementYear, String taxYear) {
 		super();
 		this.slNo = slNo;
 		this.landValue = landValue;
@@ -39,6 +42,22 @@ public class EtTaxInformation {
 		this.totalValue = totalValue;
 		this.excemption = excemption;
 		this.notes = notes;
+		this.assementYear = assementYear;
+		this.taxYear = taxYear;
+	}
+	
+	
+	public String getAssementYear() {
+		return assementYear;
+	}
+	public void setAssementYear(String assementYear) {
+		this.assementYear = assementYear;
+	}
+	public String getTaxYear() {
+		return taxYear;
+	}
+	public void setTaxYear(String taxYear) {
+		this.taxYear = taxYear;
 	}
 	public Long getSlNo() {
 		return slNo;
