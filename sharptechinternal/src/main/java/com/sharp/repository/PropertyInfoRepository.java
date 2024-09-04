@@ -47,5 +47,8 @@ public interface PropertyInfoRepository extends JpaRepository<PropertyInfo, Stri
     @Query("SELECT e FROM PropertyInfo e WHERE e.propertyAddress LIKE %:partialAddress%")
     List<PropertyInfo> searchByAddress(@Param("partialAddress") String partialAddress);
     
+    
+    PropertyInfo findByOrderNumber(String orderNumber);
+    
 }
 

@@ -22,6 +22,7 @@ import com.sharp.model.EtGeneralInfo;
 import com.sharp.model.PropertyInfo;
 import com.sharp.repository.PropertyInfoRepository;
 import com.sharp.repository.VestingDeedInfoRepository;
+import com.sharp.service.PropertyInfoService;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
@@ -119,41 +120,46 @@ public class PVController {
 
 	        return addressDTOList;
 	    }
+	    @Autowired
+	    private PropertyInfoService propertyInfoService;
+	    @PostMapping("/update/das")
+	    public ResponseEntity<PropertyInfo> updatePropertyInfo(@RequestBody PVRequest pvRequest) {
+	        // Retrieve the existing property info by order number
+	    	 System.out.println("Received request: " + pvRequest);
+	        PropertyInfo existingPropertyInfo = propertyInfoService.findByOrderNumber(pvRequest.getPropertyinfo().getOrderNumber());
+	        if (existingPropertyInfo == null) {
+	            return ResponseEntity.notFound().build();
+	        }
 
-//	    @PutMapping("/update")
-//	    public PropertyInfo updatePropertyInfo(@RequestBody PVRequest request) {
-//	        PropertyInfo propertyInfo = request.getPropertyinfo();
-//	        
-//	        // Check if the PropertyInfo exists
-//	        PropertyInfo existingPropertyInfo = propertyInfoRepository.findById(propertyInfo.getOrderNumber())
-//	                .orElseThrow(() -> new ResourceNotFoundException("PropertyInfo not found with orderNumber: " + propertyInfo.getOrderNumber()));
-//
-//	        // Update existingPropertyInfo with new values from the request
-//	        existingPropertyInfo.setReferenceNumber(propertyInfo.getReferenceNumber());
-//	        existingPropertyInfo.setSearchDate(propertyInfo.getSearchDate());
-//	        existingPropertyInfo.setEffectiveDate(propertyInfo.getEffectiveDate());
-//	        existingPropertyInfo.setPropertyAddress(propertyInfo.getPropertyAddress());
-//	        existingPropertyInfo.setState(propertyInfo.getState());
-//	        existingPropertyInfo.setCounty(propertyInfo.getCounty());
-//	        existingPropertyInfo.setBorrowerName(propertyInfo.getBorrowerName());
-//	        existingPropertyInfo.setLotUnit(propertyInfo.getLotUnit());
-//	        existingPropertyInfo.setBlock(propertyInfo.getBlock());
-//	        existingPropertyInfo.setSubdivision(propertyInfo.getSubdivision());
-//	        existingPropertyInfo.setParcelNumber(propertyInfo.getParcelNumber());
-//	        existingPropertyInfo.setPropertyType(propertyInfo.getPropertyType());
-//
-//	        // Handle the related entities similarly
-//	        existingPropertyInfo.setVestingdeedinfo(propertyInfo.getVestingdeedinfo());
-//	        existingPropertyInfo.setAbsActiveJudgementsAndLines(propertyInfo.getAbsActiveJudgementsAndLines());
-//	        existingPropertyInfo.setAbsopenmortgagedeedinfo(propertyInfo.getAbsopenmortgagedeedinfo());
-//	        existingPropertyInfo.setAssessementsAndTaxInfo(propertyInfo.getAssessementsAndTaxInfo());
-//	        existingPropertyInfo.setNamesrun(propertyInfo.getNamesrun());
-//	        existingPropertyInfo.setTaxinstallments(propertyInfo.getTaxinstallments());
-//	        existingPropertyInfo.setDasadditionalinformation(propertyInfo.getDasadditionalinformation());
-//
-//	        // Save and return the updated entity
-//	        return propertyInfoRepository.save(existingPropertyInfo);
-//	    }
+	        // Update the existing PropertyInfo with the new data from pvRequest
+	        existingPropertyInfo.setReferenceNumber(pvRequest.getPropertyinfo().getReferenceNumber());
+	        existingPropertyInfo.setSearchDate(pvRequest.getPropertyinfo().getSearchDate());
+	        existingPropertyInfo.setEffectiveDate(pvRequest.getPropertyinfo().getEffectiveDate());
+	        existingPropertyInfo.setPropertyAddress(pvRequest.getPropertyinfo().getPropertyAddress());
+	        existingPropertyInfo.setState(pvRequest.getPropertyinfo().getState());
+	        existingPropertyInfo.setCounty(pvRequest.getPropertyinfo().getCounty());
+	        existingPropertyInfo.setBorrowerName(pvRequest.getPropertyinfo().getBorrowerName());
+	        existingPropertyInfo.setLotUnit(pvRequest.getPropertyinfo().getLotUnit());
+	        existingPropertyInfo.setBlock(pvRequest.getPropertyinfo().getBlock());
+	        existingPropertyInfo.setSubdivision(pvRequest.getPropertyinfo().getSubdivision());
+	        existingPropertyInfo.setParcelNumber(pvRequest.getPropertyinfo().getParcelNumber());
+	        existingPropertyInfo.setPropertyType(pvRequest.getPropertyinfo().getPropertyType());
+
+	        // Update the related entities
+	        existingPropertyInfo.setVestingdeedinfo(pvRequest.getVestingdeedinfo());
+	        existingPropertyInfo.setAbsActiveJudgementsAndLines(pvRequest.getPropertyinfo().getAbsActiveJudgementsAndLines());
+	        existingPropertyInfo.setAbsopenmortgagedeedinfo(pvRequest.getPropertyinfo().getAbsopenmortgagedeedinfo());
+	        existingPropertyInfo.setAssessementsAndTaxInfo(pvRequest.getPropertyinfo().getAssessementsAndTaxInfo());
+	        existingPropertyInfo.setNamesrun(pvRequest.getPropertyinfo().getNamesrun());
+	        existingPropertyInfo.setTaxinstallments(pvRequest.getPropertyinfo().getTaxinstallments());
+	        existingPropertyInfo.setDasadditionalinformation(pvRequest.getPropertyinfo().getDasadditionalinformation());
+
+	        // Save the updated property info
+	        PropertyInfo updatedPropertyInfo = propertyInfoService.savePropertyInfo(existingPropertyInfo);
+
+	        // Return the updated property info
+	        return ResponseEntity.ok(updatedPropertyInfo);
+	    }
 	    
 }
 	

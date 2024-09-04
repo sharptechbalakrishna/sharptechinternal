@@ -2,6 +2,7 @@ package com.sharp.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,9 +20,11 @@ import com.sharp.dto.AddressDTO;
 import com.sharp.dto.EtInsertResponse;
 import com.sharp.dto.EtRequest;
 import com.sharp.model.EtGeneralInfo;
+import com.sharp.model.EtGeneralRequest;
 import com.sharp.repository.EtGeneralInfoRepository;
 import com.sharp.repository.EtTaxInformationRepositroy;
 import com.sharp.repository.EtVestingInfoRepository;
+import com.sharp.service.EtGeneralInfoService;
 
 
 // This is another Comment
@@ -131,7 +135,34 @@ public class EtGeneralInfoController {
 //	public List<EtGeneralInfo> searchByAddress(@PathVariable String propertyAddress) {
 //	    return etgeneralinforepository.searchByAddress(propertyAddress);
 //	}
-//	
+//	 @PutMapping("/{orderNumber}")
+	@Autowired
+	private EtGeneralInfoService etGeneralInfoService;
+	//@PostMapping("update/etrack")
+//	 @PutMapping("/update/{orderNumber}")
+//	 public ResponseEntity<EtGeneralInfo> updateEtGeneralInfo(@PathVariable String orderNumber, @RequestBody EtGeneralInfo updateRequest) {
+//	        System.out.println("Entered into update request for orderNumber: " + orderNumber);
+//	        try {
+//	            EtGeneralInfo updatedEtGeneralInfo = etGeneralInfoService.updateEtGeneralInfo(orderNumber, updateRequest);
+//	            return ResponseEntity.ok(updatedEtGeneralInfo);
+//	        } catch (IllegalArgumentException e) {
+//	            return ResponseEntity.badRequest().body(null); // Handle bad requests if input is invalid
+//	        } catch (NoSuchElementException e) {
+//	            return ResponseEntity.notFound().build(); // Handle case where orderNumber is not found
+//	        }
+//	    }
 	
-
+//	@PutMapping("/update/{orderNumber}")
+//	public ResponseEntity<EtGeneralInfo> updateEtGeneralInfo(@PathVariable String orderNumber, @RequestBody EtGeneralInfo updateRequest) {
+//	    System.out.println("Order Number: " + orderNumber);
+//	    System.out.println("Update Request: " + updateRequest);
+//	    try {
+//	        EtGeneralInfo updatedEtGeneralInfo = etGeneralInfoService.updateEtGeneralInfo(orderNumber, updateRequest);
+//	        return ResponseEntity.ok(updatedEtGeneralInfo);
+//	    } catch (IllegalArgumentException e) {
+//	        return ResponseEntity.badRequest().body(null);
+//	    } catch (NoSuchElementException e) {
+//	        return ResponseEntity.notFound().build();
+//	    }
+//	}
 }
