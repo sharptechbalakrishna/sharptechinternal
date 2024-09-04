@@ -17,18 +17,21 @@ public class EtTaxInstallment {
 	private String amount;
 	private String status;
 	private Date paidDueDate;
+	private String installment;
 	
 	
 	
 	public EtTaxInstallment() {
 		super();
 	}
-	public EtTaxInstallment(Long slNo, String amount, String status, Date paidDueDate) {
+	
+	public EtTaxInstallment(Long slNo, String amount, String status, Date paidDueDate, String installment) {
 		super();
 		this.slNo = slNo;
 		this.amount = amount;
 		this.status = status;
 		this.paidDueDate = paidDueDate;
+		this.installment = installment;
 	}
 	public Long getSlNo() {
 		return slNo;
@@ -54,10 +57,15 @@ public class EtTaxInstallment {
 	public void setPaidDueDate(Date paidDueDate) {
 		this.paidDueDate = paidDueDate;
 	}
-	public void setOrderNumber(String orderNumber) {
-		// TODO Auto-generated method stub
-		
+	public String getInstallment() {
+		return installment;
 	}
+	public void setInstallment(String installment) {
+		this.installment = installment;
+	}
+	
+	
+	
 	
 	
 	
