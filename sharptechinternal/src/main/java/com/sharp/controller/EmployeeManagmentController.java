@@ -3,11 +3,10 @@ package com.sharp.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sharp.dto.LogoutRequest;
 import com.sharp.dto.OtpVerificationRequest;
 import com.sharp.dto.ReqRes;
+import com.sharp.dto.UpdatesReqRes;
 import com.sharp.model.Employee;
+import com.sharp.model.Updates;
 import com.sharp.service.EmployeeManagementService;
 
 @RestController
@@ -34,6 +35,7 @@ public class EmployeeManagmentController {
 	// Login
 	@PostMapping("/auth/login")
     public ResponseEntity<ReqRes> login(@RequestBody ReqRes req) {
+		System.out.println("Loggin Emai" + req.getEmail());
         return ResponseEntity.ok(employeeManagementService.login(req));
     }
 //	@PostMapping("/auth/login")
@@ -64,6 +66,15 @@ public class EmployeeManagmentController {
 //				, adminEmail
 				));
 	}
+	
+
+	
+	
+//	@GetMapping("/future/updates")
+//    public ResponseEntity<UpdatesReqRes> getAllUpdates() {
+//        return ResponseEntity.ok(employeeManagementService.getAllUpdates());
+//    }
+//	
 	
 	
 	@PostMapping("/auth/refresh")
@@ -105,5 +116,36 @@ public class EmployeeManagmentController {
 	public ResponseEntity<ReqRes> deleteUSer(@PathVariable Long userId) {
 		return ResponseEntity.ok(employeeManagementService.deleteUser(userId));
 	}
+	
+	
+	@GetMapping("/future/updates")
+    public ResponseEntity<UpdatesReqRes> getAllUpdates() {
+        return ResponseEntity.ok(employeeManagementService.getAllUpdates());
+    }
+	
+	
+	@PostMapping("/future/updates")
+    public ResponseEntity<Updates> createUpdate(@RequestBody UpdatesReqRes updatesReqRes) {
+		
+		return ResponseEntity.ok(employeeManagementService.saveUpdate(updatesReqRes));
+        
+    }
+	
+//	@PutMapping("/future/updates{id}")
+//	public ResponseEntity<ReqRes> updateUpdates(@PathVariable Long id, @RequestBody UpdatesReqRes updatesReqRes) {
+//		return ResponseEntity.ok(employeeManagementService.editUpdates(id, updatesReqRes));
+//	}
+	
+	
+//	@PostMapping("/auth/login")
+//    public ResponseEntity<ReqRes> login(@RequestBody ReqRes req) {
+//		System.out.println("Loggin Emai" + req.getEmail());
+//        return ResponseEntity.ok(employeeManagementService.login(req));
+//    }
+	
+	
+
+
+
 
 }

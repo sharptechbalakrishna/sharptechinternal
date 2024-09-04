@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.sharp.model.Employee;
@@ -21,5 +22,11 @@ public interface EmployeeRepo extends JpaRepository<Employee, Long> {
     String findLatestEmpId();
 	
 	 boolean existsByEmail(String email);
+	 
+	 @Query("SELECT MAX(CAST(SUBSTRING(e.empId, 3) AS int)) FROM Employee e WHERE e.empId LIKE :prefix%")
+	 Integer findMaxEmpIdNumber(@Param("prefix") String prefix);
+	 
+	 
+	 
 
 }

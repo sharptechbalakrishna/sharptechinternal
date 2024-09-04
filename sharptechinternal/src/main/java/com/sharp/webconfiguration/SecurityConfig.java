@@ -36,7 +36,7 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.csrf(AbstractHttpConfigurer::disable).cors(Customizer.withDefaults())
 				.authorizeHttpRequests(request -> request.requestMatchers("/auth/**", "/public/**").permitAll()
-						.requestMatchers("/auth/login", "/auth/forgot-password", "/auth/reset-password","/auth/verify-otp").permitAll()
+						.requestMatchers("/auth/login", "/auth/forgot-password", "/auth/reset-password", "/auth/verify-otp","/future/updates").permitAll()
 						.requestMatchers("/admin/**").hasAnyAuthority("ADMIN").requestMatchers("/user/**")
 						.hasAnyAuthority("USER").requestMatchers("/adminuser/**").hasAnyAuthority("ADMIN", "USER")
 						.anyRequest().authenticated())

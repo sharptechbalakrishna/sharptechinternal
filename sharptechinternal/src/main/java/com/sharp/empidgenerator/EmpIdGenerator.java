@@ -7,27 +7,18 @@ import com.sharp.repository.EmployeeRepo;
 
 @Component
 public class EmpIdGenerator {
-	
-	@Autowired
-    private EmployeeRepo employeeRepo;
+    
+	 @Autowired
+	    private EmployeeRepo employeeRepo;
 
-    private static final String PREFIX = "ST";
-    private static final int NUMERIC_PART_LENGTH = 3;
-    private static final int START_NUMBER = 101;
+	    private static final String PREFIX = "ST";
+	    private static final int START_NUMBER = 101;
 
-    public String generateNewEmpId() {
-        String latestEmpId = employeeRepo.findLatestEmpId();
+	    public String generateNewEmpId() {
+	        Integer maxEmpIdNumber = employeeRepo.findMaxEmpIdNumber(PREFIX);
 
-        int newEmpIdNumber = START_NUMBER;;
-        if (latestEmpId != null && latestEmpId.startsWith(PREFIX)) {
-            String numericPart = latestEmpId.substring(PREFIX.length());
-            try {
-            	int latestNumber = Integer.parseInt(numericPart);
-            	newEmpIdNumber = Math.max(latestNumber + 1, START_NUMBER); // Ensure it never goes below 101
-            } catch (NumberFormatException e) {
-                newEmpIdNumber =  START_NUMBER;
-            }
-        }
-        return PREFIX + String.format("%0" + NUMERIC_PART_LENGTH + "d", newEmpIdNumber);
-    }
+	        int newEmpIdNumber = (maxEmpIdNumber != null) ? maxEmpIdNumber + 1 : START_NUMBER;
+
+	        return PREFIX + newEmpIdNumber;
+	    }
 }

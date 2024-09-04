@@ -17,16 +17,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sharp.dto.ReqRes;
+import com.sharp.dto.UpdatesReqRes;
 import com.sharp.empidgenerator.EmpIdGenerator;
 import com.sharp.model.Employee;
 import com.sharp.model.LoginHistory;
 import com.sharp.model.LoginOtp;
+import com.sharp.model.Updates;
 import com.sharp.repository.EmployeeRepo;
 import com.sharp.repository.LoginHistoryRepo;
+import com.sharp.repository.UpdatesRepository;
 
 import jakarta.transaction.Transactional;
-
-
 
 @Service
 public class EmployeeManagementService {
@@ -48,13 +49,15 @@ public class EmployeeManagementService {
 
 	@Autowired
 	private EmpIdGenerator empIdGenerator;
-	
+
 	@Autowired
 	private EmailService emailService;
-	
+
 	@Autowired
 	private OtpService otpService;
-	
+
+	@Autowired
+	private UpdatesRepository updatesRepository;
 
 	private static final Logger logger = LoggerFactory.getLogger(EmployeeManagementService.class);
 
@@ -105,106 +108,107 @@ public class EmployeeManagementService {
 //		
 //		return response;
 //	}
-	
-	
+
 	public ReqRes login(ReqRes loginRequest) {
-	    ReqRes response = new ReqRes();
-	    try {
-	        // Check if the email is registered
-	        Employee user = employeeRepo.findByEmail(loginRequest.getEmail())
-	                                    .orElseThrow(() -> new NoSuchElementException("User not registered"));
+		ReqRes response = new ReqRes();
+		try {
+			// Check if the email is registered
+			Employee user = employeeRepo.findByEmail(loginRequest.getEmail())
+					.orElseThrow(() -> new NoSuchElementException("User not registered"));
 
-	        // Authenticate the user
-	        try {
-	            authenticationManager.authenticate(
-	                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-	        } catch (BadCredentialsException e) {
-	            throw new IllegalArgumentException("Incorrect password");
-	        }
+			// Authenticate the user
+			try {
+				authenticationManager.authenticate(
+						new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+			} catch (BadCredentialsException e) {
+				throw new IllegalArgumentException("Incorrect password");
+			}
 
-	        // Generate and send OTP
-	        String otp = otpService.generateOtp(user.getEmail());
-	        emailService.sendOtp(user.getEmail(), otp);
+			// Generate and send OTP
+			String otp = otpService.generateOtp(user.getEmail());
+			emailService.sendOtp(user.getEmail(), otp);
 
-	        response.setStatusCode(200);
-	        response.setMessage("OTP sent to registered email. Please verify.");
-	    } catch (NoSuchElementException e) {
-	        response.setStatusCode(404);
-	        response.setMessage("User not registered");
-	    } catch (IllegalArgumentException e) {
-	        response.setStatusCode(401);
-	        response.setMessage("Incorrect password");
-	    } catch (Exception e) {
-	        response.setStatusCode(500);
-	        response.setMessage("An unexpected error occurred: " + e.getMessage());
-	    }
+			response.setStatusCode(200);
+			response.setMessage("OTP sent to registered email. Please verify.");
+		} catch (NoSuchElementException e) {
+			response.setStatusCode(404);
+			response.setMessage("User not registered");
+		} catch (IllegalArgumentException e) {
+			response.setStatusCode(401);
+			response.setMessage("Incorrect password");
+		} catch (Exception e) {
+			response.setStatusCode(500);
+			response.setMessage("An unexpected error occurred: " + e.getMessage());
+		}
 
-	    return response;
+		return response;
 	}
-	
+
 	@Transactional
 	public ReqRes verifyOtp(String email, String otp) {
-	    ReqRes response = new ReqRes();
-	    try {
-	        // Retrieve and validate OTP
-	        LoginOtp loginOtp = otpService.getOtp(email)
-	                                      .orElseThrow(() -> new IllegalArgumentException("Invalid or expired OTP"));
+		ReqRes response = new ReqRes();
+		try {
+			// Retrieve and validate OTP
+			LoginOtp loginOtp = otpService.getOtp(email)
+					.orElseThrow(() -> new IllegalArgumentException("Invalid or expired OTP"));
 
-	        if (!loginOtp.getOtp().equals(otp) || loginOtp.getExpirationTime().before(new Date(System.currentTimeMillis()))) {
-	            throw new IllegalArgumentException("Invalid or expired OTP");
-	        }
+			if (!loginOtp.getOtp().equals(otp)
+					|| loginOtp.getExpirationTime().before(new Date(System.currentTimeMillis()))) {
+				throw new IllegalArgumentException("Invalid or expired OTP");
+			}
 
-	        // OTP is valid, delete it from the database
-	        otpService.deleteOtp(email);
+			// OTP is valid, delete it from the database
+			otpService.deleteOtp(email);
 
-	        // Fetch user details
-	        Employee user = employeeRepo.findByEmail(email)
-	                                    .orElseThrow(() -> new NoSuchElementException("User not registered"));
+			// Fetch user details
+			Employee user = employeeRepo.findByEmail(email)
+					.orElseThrow(() -> new NoSuchElementException("User not registered"));
 
-	        // Generate JWT and refresh token
-	        var jwt = jwtUtils.generateToken(user);
-	        var refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
+			// Generate JWT and refresh token
+			var jwt = jwtUtils.generateToken(user);
+			var refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
 
-	        // Save login information
-	        LoginHistory loginHistory = new LoginHistory();
-	        loginHistory.setEmail(user.getEmail());
-	        loginHistory.setLoginTime(new Date(System.currentTimeMillis()));
-	        String transactionId = UUID.randomUUID().toString();
-	        loginHistory.setTransactionid(transactionId);
-	        loginHistory.setStatus("Active");
-	        loginHistoryRepo.save(loginHistory);
+			// Save login information
+			LoginHistory loginHistory = new LoginHistory();
+			loginHistory.setEmail(user.getEmail());
+			loginHistory.setLoginTime(new Date(System.currentTimeMillis()));
+			String transactionId = UUID.randomUUID().toString();
+			loginHistory.setTransactionid(transactionId);
+			loginHistory.setStatus("Active");
+			loginHistoryRepo.save(loginHistory);
 
-	        response.setStatusCode(200);
-	        response.setToken(jwt);
-	        response.setRole(user.getRole());
-	        response.setRefreshToken(refreshToken);
-	        response.setExpirationTime("24Hrs");
-	        response.setTransactionId(transactionId);
-	        response.setMessage("Successfully Logged In");
-	    } catch (NoSuchElementException e) {
-	        response.setStatusCode(404);
-	        response.setMessage("User not registered");
-	    } catch (IllegalArgumentException e) {
-	        response.setStatusCode(401);
-	        response.setMessage("Invalid or expired OTP");
-	    } catch (Exception e) {
-	        response.setStatusCode(500);
-	        response.setMessage("An unexpected error occurred: " + e.getMessage());
-	    }
+			response.setStatusCode(200);
+			response.setToken(jwt);
+			response.setRole(user.getRole());
+			response.setRefreshToken(refreshToken);
+			response.setExpirationTime("24Hrs");
+			response.setTransactionId(transactionId);
+			response.setMessage("Successfully Logged In");
+		} catch (NoSuchElementException e) {
+			response.setStatusCode(404);
+			response.setMessage("User not registered");
+		} catch (IllegalArgumentException e) {
+			response.setStatusCode(401);
+			response.setMessage("Invalid or expired OTP");
+		} catch (Exception e) {
+			response.setStatusCode(500);
+			response.setMessage("An unexpected error occurred: " + e.getMessage());
+		}
 
-	    return response;
+		return response;
 	}
 
 	public ReqRes logout(String email, String transactionId) {
 		ReqRes response = new ReqRes();
 		try {
-			 LoginHistory loginHistory = loginHistoryRepo.findByEmailAndTransactionid(email, transactionId)
-                    .orElseThrow(() -> new Exception("No login record found for email: " + email + " and transactionId: " + transactionId));
+			LoginHistory loginHistory = loginHistoryRepo.findByEmailAndTransactionid(email, transactionId)
+					.orElseThrow(() -> new Exception(
+							"No login record found for email: " + email + " and transactionId: " + transactionId));
 			loginHistory.setLogoutTime(new Date(System.currentTimeMillis()));
 			loginHistory.setStatus("Closed");
-            loginHistory.setTransactionid("Expired");
+			loginHistory.setTransactionid("Expired");
 			loginHistoryRepo.save(loginHistory);
-			
+
 			response.setStatusCode(200);
 			response.setMessage("Successfully Logged Out");
 			logger.info("Logout time updated for email: {}", email);
@@ -219,11 +223,10 @@ public class EmployeeManagementService {
 //	The below commented line for register should be remove after regestering atleast 1 Admin
 	public ReqRes register(ReqRes registrationRequest
 //			, String adminEmail
-			) {
+	) {
 		ReqRes resp = new ReqRes();
 
 		try {
-			
 
 			// Check if email already exists
 			Optional<Employee> existingUserByEmail = employeeRepo.findByEmail(registrationRequest.getEmail());
@@ -236,7 +239,7 @@ public class EmployeeManagementService {
 			String newEmpId = empIdGenerator.generateNewEmpId();
 			Employee employee = new Employee();
 			employee.setEmail(registrationRequest.getEmail());
-			
+
 			employee.setPhoneNumber(registrationRequest.getPhoneNumber());
 			employee.setAlternatePhoneNumber(registrationRequest.getAlternatePhoneNumber());
 
@@ -373,15 +376,62 @@ public class EmployeeManagementService {
 		ReqRes reqRes = new ReqRes();
 		try {
 			Optional<Employee> userOptional = employeeRepo.findById(userId);
+
+			if (!userOptional.isPresent()) {
+				reqRes.setStatusCode(404); // Not Found
+				reqRes.setMessage("User not found for update");
+				return reqRes;
+			}
+
+			Employee existingUser = userOptional.get();
+
+//			Optional<Employee> existingUserByEmail = employeeRepo.findByEmpId(updatedUser.getEmpId());
+
+			// Check if the empId in updatedUser is different from the current user's empId
+			if (!existingUser.getEmpId().equals(updatedUser.getEmpId())) {
+
+				// Check if the new empId already exists for another user
+				Optional<Employee> existingUserByEmpId = employeeRepo.findByEmpId(updatedUser.getEmpId());
+				if (existingUserByEmpId.isPresent()) {
+					reqRes.setStatusCode(400); // Bad Request
+					reqRes.setMessage("This empId is already registered with another user.");
+					return reqRes;
+				}
+			}
+
+			// Check if the email in updatedUser is different from the current user's email
+			if (!existingUser.getEmail().equals(updatedUser.getEmail())) {
+
+				// Check if the new email already exists for another user
+				Optional<Employee> existingUserByEmail = employeeRepo.findByEmail(updatedUser.getEmail());
+				if (existingUserByEmail.isPresent()) {
+					reqRes.setStatusCode(400); // Bad Request
+					reqRes.setMessage("This email is already registered with another user.");
+					return reqRes;
+				}
+			}
+
+//			// Check if email already exists
+//			if (existingUserByEmail.isPresent()) {
+//				reqRes.setStatusCode(400); // Bad Request
+//				reqRes.setMessage("This email is already registered with another user.");
+//				return reqRes;
+//			}
+
+			// Check if empId already exists
+//			if (existingUserByEmail.isPresent()) {
+//			reqRes.setStatusCode(400); // Bad Request
+//			reqRes.setMessage("This empId is already registered with another user.");
+//			return reqRes;
+//		}
+
 			if (userOptional.isPresent()) {
-				Employee existingUser = userOptional.get();
 				existingUser.setEmail(updatedUser.getEmail());
-				
+
 				existingUser.setPhoneNumber(updatedUser.getPhoneNumber());
 				existingUser.setAlternatePhoneNumber(updatedUser.getAlternatePhoneNumber());
 
-				
-//				existingUser.setEmpId(updatedUser.getEmpId());
+				existingUser.setEmpId(updatedUser.getEmpId());
 				existingUser.setFirstName(updatedUser.getFirstName());
 				existingUser.setMiddleName(updatedUser.getFirstName());
 				existingUser.setLastName(updatedUser.getLastName());
@@ -408,7 +458,7 @@ public class EmployeeManagementService {
 				Employee savedUser = employeeRepo.save(existingUser);
 				reqRes.setEmployee(savedUser);
 				reqRes.setStatusCode(200);
-				reqRes.setMessage("User updated successfully");
+				reqRes.setMessage("Updated successfully");
 			} else {
 				reqRes.setStatusCode(404);
 				reqRes.setMessage("User not found for update");
@@ -440,4 +490,57 @@ public class EmployeeManagementService {
 		return reqRes;
 
 	}
+
+	public UpdatesReqRes getAllUpdates() {
+		UpdatesReqRes reqRes = new UpdatesReqRes();
+
+		try {
+			List<Updates> result = updatesRepository.findAll();
+			if (!result.isEmpty()) {
+				reqRes.setUpdatesList(result);
+				reqRes.setStatusCode(200);
+				reqRes.setMessage("Successful");
+			} else {
+				reqRes.setStatusCode(404);
+				reqRes.setMessage("No updates found");
+			}
+			return reqRes;
+		} catch (Exception e) {
+			reqRes.setStatusCode(500);
+			reqRes.setMessage("Error occurred: " + e.getMessage());
+			return reqRes;
+		}
+	}
+
+	public Updates saveUpdate(UpdatesReqRes updatesReqRes) {
+		
+		Updates update = new Updates();
+		
+		UpdatesReqRes reqRes = new UpdatesReqRes();
+
+		try {
+			update.setTitle(updatesReqRes.getTitle());
+			update.setDescription(updatesReqRes.getDescription());
+			update.setReleaseDate(updatesReqRes.getReleaseDate());
+			update.setCreatedBy(updatesReqRes.getCreatedBy());
+			update.setCreatedDate(updatesReqRes.getCreatedDate());
+			update.setVisible(updatesReqRes.isVisible());
+			update.setUrl(updatesReqRes.getUrl());
+
+			Updates updatesResult = updatesRepository.save(update);
+			return updatesResult;
+		} catch (Exception e) {
+			reqRes.setStatusCode(500);
+			reqRes.setMessage("Error occurred while saving update: " + e.getMessage());
+			// Log the error message or throw a custom exception if necessary
+			return null; // or throw new RuntimeException("Failed to save update", e);
+		}
+	}
+//	public Updates editUpdates(Long id,UpdatesReqRes updatesReqRes) {
+//		Updates update = new Updates();
+//		UpdatesReqRes reqRes = new UpdatesReqRes();
+//		
+//		return ("Sucessfully Updated");
+//	}
+
 }
