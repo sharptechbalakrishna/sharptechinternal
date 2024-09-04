@@ -68,18 +68,21 @@ public class PropertyInfo {
 	@JoinColumn(name = "orderNumber", referencedColumnName = "orderNumber")
 	private List<DasAdditionalInfo> dasadditionalinformation;
 	
-	
+	@OneToMany(targetEntity = DasLegalDescription.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "orderNumber", referencedColumnName = "orderNumber")
+	private List<DasLegalDescription> daslegaldescriptioninfo;
 
-	
 	public PropertyInfo() {
 		super();
 	}
 
 	public PropertyInfo(String orderNumber, String referenceNumber, Date searchDate, Date effectiveDate,
 			String propertyAddress, String state, String county, String borrowerName, String lotUnit, String block,
-			String subdivision, String parcelNumber, String propertyType, List<VestingDeedInfo> vestingdeedinfo
-			,List<AbsActiveJudgementsAndLines> absActiveJudgementsAndLines,List<OpenMortgageDeddInfo> absopenmortgagedeedinfo,List<AssessementsAndTaxInfo> assessementsAndTaxInfo
-			,List<NamesRun> namesrun,List<TaxInfo> taxinstallments, List<DasAdditionalInfo> dasadditionalinformation) {
+			String subdivision, String parcelNumber, String propertyType, List<VestingDeedInfo> vestingdeedinfo,
+			List<OpenMortgageDeddInfo> absopenmortgagedeedinfo,
+			List<AbsActiveJudgementsAndLines> absActiveJudgementsAndLines,
+			List<AssessementsAndTaxInfo> assessementsAndTaxInfo, List<NamesRun> namesrun, List<TaxInfo> taxinstallments,
+			List<DasAdditionalInfo> dasadditionalinformation, List<DasLegalDescription> daslegaldescriptioninfo) {
 		//List<TaxInfo> taxinstallments
 		super();
 		this.orderNumber = orderNumber;
@@ -95,30 +98,14 @@ public class PropertyInfo {
 		this.subdivision = subdivision;
 		this.parcelNumber = parcelNumber;
 		this.propertyType = propertyType;
-		this.vestingdeedinfo = vestingdeedinfo;	
+		this.vestingdeedinfo = vestingdeedinfo;
+		this.absopenmortgagedeedinfo = absopenmortgagedeedinfo;
 		this.absActiveJudgementsAndLines = absActiveJudgementsAndLines;
-		this.absopenmortgagedeedinfo = absopenmortgagedeedinfo;
-	}
-
-	public PropertyInfo(List<OpenMortgageDeddInfo> absopenmortgagedeedinfo) {
-		super();
-		this.absopenmortgagedeedinfo = absopenmortgagedeedinfo;
-	}
-
-	public List<OpenMortgageDeddInfo> getAbsopenmortgagedeedinfo() {
-		return absopenmortgagedeedinfo;
-	}
-
-	public void setAbsopenmortgagedeedinfo(List<OpenMortgageDeddInfo> absopenmortgagedeedinfo) {
-		this.absopenmortgagedeedinfo = absopenmortgagedeedinfo;
-	}
-
-	public List<AbsActiveJudgementsAndLines> getAbsActiveJudgementsAndLines() {
-		return absActiveJudgementsAndLines;
-	}
-
-	public void setAbsActiveJudgementsAndLines(List<AbsActiveJudgementsAndLines> absActiveJudgementsAndLines) {
-		this.absActiveJudgementsAndLines = absActiveJudgementsAndLines;
+		this.assessementsAndTaxInfo = assessementsAndTaxInfo;
+		this.namesrun = namesrun;
+		this.taxinstallments = taxinstallments;
+		this.dasadditionalinformation = dasadditionalinformation;
+		this.daslegaldescriptioninfo = daslegaldescriptioninfo;
 	}
 
 	public String getOrderNumber() {
@@ -232,7 +219,23 @@ public class PropertyInfo {
 	public void setVestingdeedinfo(List<VestingDeedInfo> vestingdeedinfo) {
 		this.vestingdeedinfo = vestingdeedinfo;
 	}
-	
+
+	public List<OpenMortgageDeddInfo> getAbsopenmortgagedeedinfo() {
+		return absopenmortgagedeedinfo;
+	}
+
+	public void setAbsopenmortgagedeedinfo(List<OpenMortgageDeddInfo> absopenmortgagedeedinfo) {
+		this.absopenmortgagedeedinfo = absopenmortgagedeedinfo;
+	}
+
+	public List<AbsActiveJudgementsAndLines> getAbsActiveJudgementsAndLines() {
+		return absActiveJudgementsAndLines;
+	}
+
+	public void setAbsActiveJudgementsAndLines(List<AbsActiveJudgementsAndLines> absActiveJudgementsAndLines) {
+		this.absActiveJudgementsAndLines = absActiveJudgementsAndLines;
+	}
+
 	public List<AssessementsAndTaxInfo> getAssessementsAndTaxInfo() {
 		return assessementsAndTaxInfo;
 	}
@@ -265,6 +268,13 @@ public class PropertyInfo {
 		this.dasadditionalinformation = dasadditionalinformation;
 	}
 
+	public List<DasLegalDescription> getDaslegaldescriptioninfo() {
+		return daslegaldescriptioninfo;
+	}
+
+	public void setDaslegaldescriptioninfo(List<DasLegalDescription> daslegaldescriptioninfo) {
+		this.daslegaldescriptioninfo = daslegaldescriptioninfo;
+	}
 
 	
 	

@@ -8,17 +8,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "dasadditionalinformation")
-public class DasAdditionalInfo {
-	
+@Table(name = "etlegaldescriptioninfo")
+
+public class EtLegalDescription {
+
+
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long slno;
 	
 	@Column(columnDefinition = "MEDIUMTEXT")
-	private String additionalInformation;
-	
-	
+	private String legaldescription;
+
 	public Long getSlno() {
 		return slno;
 	}
@@ -27,17 +28,13 @@ public class DasAdditionalInfo {
 		this.slno = slno;
 	}
 
-	public String getAdditionalInformation() {
-		return additionalInformation;
+	public String getLegaldescription() {
+		return legaldescription;
 	}
 
-	public void setAdditionalInformation(String additionalInformation) {
-		this.additionalInformation = additionalInformation;
+	public void setLegaldescription(String legaldescription) {
+		this.legaldescription = legaldescription;
 	}
-
-
 	
 	
-
-
 }
