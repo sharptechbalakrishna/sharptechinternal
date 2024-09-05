@@ -91,4 +91,28 @@ public class EtGeneralInfoService {
         // Update logic
         return etGeneralInfoRepository.save(existingInfo);
     }
+    
+    
+    
+
+    /**
+     * Finds an EtGeneralInfo by its order number.
+     *
+     * @param orderNumber the order number of the EtGeneralInfo
+     * @return the EtGeneralInfo with the given order number, or null if not found
+     */
+    public EtGeneralInfo findByOrderNumber(String orderNumber) {
+        return etGeneralInfoRepository.findByOrderNumber(orderNumber);
+    }
+
+    /**
+     * Saves or updates an EtGeneralInfo entity.
+     *
+     * @param etGeneralInfo the EtGeneralInfo entity to save or update
+     * @return the saved or updated EtGeneralInfo entity
+     */
+    @Transactional
+    public EtGeneralInfo save(EtGeneralInfo etGeneralInfo) {
+        return etGeneralInfoRepository.save(etGeneralInfo);
+    }
 }

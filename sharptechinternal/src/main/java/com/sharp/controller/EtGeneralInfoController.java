@@ -165,4 +165,85 @@ public class EtGeneralInfoController {
 //	        return ResponseEntity.notFound().build();
 //	    }
 //	}
+	
+	
+
+    @PostMapping("/update/etrack")
+    public ResponseEntity<EtGeneralInfo> updateEtGeneralInfo(@RequestBody EtGeneralInfo newEtGeneralInfo) {
+        // Retrieve the existing EtGeneralInfo by order number
+        EtGeneralInfo existingEtGeneralInfo = etGeneralInfoService.findByOrderNumber(newEtGeneralInfo.getOrderNumber());
+        if (existingEtGeneralInfo == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Update fields only if the new value is not null
+        if (newEtGeneralInfo.getRefeenceNumber() != null) {
+            existingEtGeneralInfo.setRefeenceNumber(newEtGeneralInfo.getRefeenceNumber());
+        }
+        if (newEtGeneralInfo.getSearchDate() != null) {
+            existingEtGeneralInfo.setSearchDate(newEtGeneralInfo.getSearchDate());
+        }
+        if (newEtGeneralInfo.getEffectiveDate() != null) {
+            existingEtGeneralInfo.setEffectiveDate(newEtGeneralInfo.getEffectiveDate());
+        }
+        if (newEtGeneralInfo.getPropertyAdderess() != null) {
+            existingEtGeneralInfo.setPropertyAdderess(newEtGeneralInfo.getPropertyAdderess());
+        }
+        if (newEtGeneralInfo.getState() != null) {
+            existingEtGeneralInfo.setState(newEtGeneralInfo.getState());
+        }
+        if (newEtGeneralInfo.getCountry() != null) {
+            existingEtGeneralInfo.setCountry(newEtGeneralInfo.getCountry());
+        }
+        if (newEtGeneralInfo.getParcelNumber() != null) {
+            existingEtGeneralInfo.setParcelNumber(newEtGeneralInfo.getParcelNumber());
+        }
+        if (newEtGeneralInfo.getSubDivision() != null) {
+            existingEtGeneralInfo.setSubDivision(newEtGeneralInfo.getSubDivision());
+        }
+        if (newEtGeneralInfo.getLotUnit() != null) {
+            existingEtGeneralInfo.setLotUnit(newEtGeneralInfo.getLotUnit());
+        }
+        if (newEtGeneralInfo.getBlock() != null) {
+            existingEtGeneralInfo.setBlock(newEtGeneralInfo.getBlock());
+        }
+        if (newEtGeneralInfo.getSfrPudCondo() != null) {
+            existingEtGeneralInfo.setSfrPudCondo(newEtGeneralInfo.getSfrPudCondo());
+        }
+        if (newEtGeneralInfo.getDocument() != null) {
+            existingEtGeneralInfo.setDocument(newEtGeneralInfo.getDocument());
+        }
+
+        // Update related entities only if the new data is not null
+        if (newEtGeneralInfo.getEtvestinginfo() != null) {
+            existingEtGeneralInfo.setEtvestinginfo(newEtGeneralInfo.getEtvestinginfo());
+        }
+        if (newEtGeneralInfo.getEtopenmortagedeedinfo() != null) {
+            existingEtGeneralInfo.setEtopenmortagedeedinfo(newEtGeneralInfo.getEtopenmortagedeedinfo());
+        }
+        if (newEtGeneralInfo.getEtactivejudgmentsandliens() != null) {
+            existingEtGeneralInfo.setEtactivejudgmentsandliens(newEtGeneralInfo.getEtactivejudgmentsandliens());
+        }
+        if (newEtGeneralInfo.getEttaxinformation() != null) {
+            existingEtGeneralInfo.setEttaxinformation(newEtGeneralInfo.getEttaxinformation());
+        }
+        if (newEtGeneralInfo.getEtnameruns() != null) {
+            existingEtGeneralInfo.setEtnameruns(newEtGeneralInfo.getEtnameruns());
+        }
+        if (newEtGeneralInfo.getEttaxinstallment() != null) {
+            existingEtGeneralInfo.setEttaxinstallment(newEtGeneralInfo.getEttaxinstallment());
+        }
+        if (newEtGeneralInfo.getEtadditionalinformation() != null) {
+            existingEtGeneralInfo.setEtadditionalinformation(newEtGeneralInfo.getEtadditionalinformation());
+        }
+        if (newEtGeneralInfo.getEtlegaldescriptioninfo() != null) {
+            existingEtGeneralInfo.setEtlegaldescriptioninfo(newEtGeneralInfo.getEtlegaldescriptioninfo());
+        }
+
+        // Save the updated EtGeneralInfo
+        EtGeneralInfo updatedEtGeneralInfo = etGeneralInfoService.save(existingEtGeneralInfo);
+        
+        return ResponseEntity.ok(updatedEtGeneralInfo);
+    }
+
 }

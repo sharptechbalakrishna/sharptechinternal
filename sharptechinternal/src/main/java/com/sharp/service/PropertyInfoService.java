@@ -33,4 +33,9 @@ public class PropertyInfoService {
     public PropertyInfo savePropertyInfo(PropertyInfo propertyInfo) {
         return propertyInfoRepository.save(propertyInfo);
     }
+    public PropertyInfo save(PropertyInfo propertyInfo) {
+        return propertyInfoRepository.save(propertyInfo);
+    }
+    
+    
 }

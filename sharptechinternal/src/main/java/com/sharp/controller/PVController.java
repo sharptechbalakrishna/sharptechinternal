@@ -120,44 +120,88 @@ public class PVController {
 
 	        return addressDTOList;
 	    }
+//	    @Autowired
+//	    private PropertyInfoService propertyInfoService;
+//	    
 	    @Autowired
 	    private PropertyInfoService propertyInfoService;
+
 	    @PostMapping("/update/das")
-	    public ResponseEntity<PropertyInfo> updatePropertyInfo(@RequestBody PVRequest pvRequest) {
+	    public ResponseEntity<PropertyInfo> updatePropertyInfo(@RequestBody PropertyInfo newPropertyInfo) {
 	        // Retrieve the existing property info by order number
-	    	 System.out.println("Received request: " + pvRequest);
-	        PropertyInfo existingPropertyInfo = propertyInfoService.findByOrderNumber(pvRequest.getPropertyinfo().getOrderNumber());
+	        System.out.println("Received request: " + newPropertyInfo);
+	        PropertyInfo existingPropertyInfo = propertyInfoService.findByOrderNumber(newPropertyInfo.getOrderNumber());
 	        if (existingPropertyInfo == null) {
 	            return ResponseEntity.notFound().build();
 	        }
 
-	        // Update the existing PropertyInfo with the new data from pvRequest
-	        existingPropertyInfo.setReferenceNumber(pvRequest.getPropertyinfo().getReferenceNumber());
-	        existingPropertyInfo.setSearchDate(pvRequest.getPropertyinfo().getSearchDate());
-	        existingPropertyInfo.setEffectiveDate(pvRequest.getPropertyinfo().getEffectiveDate());
-	        existingPropertyInfo.setPropertyAddress(pvRequest.getPropertyinfo().getPropertyAddress());
-	        existingPropertyInfo.setState(pvRequest.getPropertyinfo().getState());
-	        existingPropertyInfo.setCounty(pvRequest.getPropertyinfo().getCounty());
-	        existingPropertyInfo.setBorrowerName(pvRequest.getPropertyinfo().getBorrowerName());
-	        existingPropertyInfo.setLotUnit(pvRequest.getPropertyinfo().getLotUnit());
-	        existingPropertyInfo.setBlock(pvRequest.getPropertyinfo().getBlock());
-	        existingPropertyInfo.setSubdivision(pvRequest.getPropertyinfo().getSubdivision());
-	        existingPropertyInfo.setParcelNumber(pvRequest.getPropertyinfo().getParcelNumber());
-	        existingPropertyInfo.setPropertyType(pvRequest.getPropertyinfo().getPropertyType());
+	        // Update fields only if the new value is not null
+	        if (newPropertyInfo.getReferenceNumber() != null) {
+	            existingPropertyInfo.setReferenceNumber(newPropertyInfo.getReferenceNumber());
+	        }
+	        if (newPropertyInfo.getSearchDate() != null) {
+	            existingPropertyInfo.setSearchDate(newPropertyInfo.getSearchDate());
+	        }
+	        if (newPropertyInfo.getEffectiveDate() != null) {
+	            existingPropertyInfo.setEffectiveDate(newPropertyInfo.getEffectiveDate());
+	        }
+	        if (newPropertyInfo.getPropertyAddress() != null) {
+	            existingPropertyInfo.setPropertyAddress(newPropertyInfo.getPropertyAddress());
+	        }
+	        if (newPropertyInfo.getState() != null) {
+	            existingPropertyInfo.setState(newPropertyInfo.getState());
+	        }
+	        if (newPropertyInfo.getCounty() != null) {
+	            existingPropertyInfo.setCounty(newPropertyInfo.getCounty());
+	        }
+	        if (newPropertyInfo.getBorrowerName() != null) {
+	            existingPropertyInfo.setBorrowerName(newPropertyInfo.getBorrowerName());
+	        }
+	        if (newPropertyInfo.getLotUnit() != null) {
+	            existingPropertyInfo.setLotUnit(newPropertyInfo.getLotUnit());
+	        }
+	        if (newPropertyInfo.getBlock() != null) {
+	            existingPropertyInfo.setBlock(newPropertyInfo.getBlock());
+	        }
+	        if (newPropertyInfo.getSubdivision() != null) {
+	            existingPropertyInfo.setSubdivision(newPropertyInfo.getSubdivision());
+	        }
+	        if (newPropertyInfo.getParcelNumber() != null) {
+	            existingPropertyInfo.setParcelNumber(newPropertyInfo.getParcelNumber());
+	        }
+	        if (newPropertyInfo.getPropertyType() != null) {
+	            existingPropertyInfo.setPropertyType(newPropertyInfo.getPropertyType());
+	        }
 
-	        // Update the related entities
-	        existingPropertyInfo.setVestingdeedinfo(pvRequest.getVestingdeedinfo());
-	        existingPropertyInfo.setAbsActiveJudgementsAndLines(pvRequest.getPropertyinfo().getAbsActiveJudgementsAndLines());
-	        existingPropertyInfo.setAbsopenmortgagedeedinfo(pvRequest.getPropertyinfo().getAbsopenmortgagedeedinfo());
-	        existingPropertyInfo.setAssessementsAndTaxInfo(pvRequest.getPropertyinfo().getAssessementsAndTaxInfo());
-	        existingPropertyInfo.setNamesrun(pvRequest.getPropertyinfo().getNamesrun());
-	        existingPropertyInfo.setTaxinstallments(pvRequest.getPropertyinfo().getTaxinstallments());
-	        existingPropertyInfo.setDasadditionalinformation(pvRequest.getPropertyinfo().getDasadditionalinformation());
+	        // Update related entities only if the new data is not null
+	        if (newPropertyInfo.getVestingdeedinfo() != null) {
+	            existingPropertyInfo.setVestingdeedinfo(newPropertyInfo.getVestingdeedinfo());
+	        }
+	        if (newPropertyInfo.getAbsopenmortgagedeedinfo() != null) {
+	            existingPropertyInfo.setAbsopenmortgagedeedinfo(newPropertyInfo.getAbsopenmortgagedeedinfo());
+	        }
+	        if (newPropertyInfo.getAbsActiveJudgementsAndLines() != null) {
+	            existingPropertyInfo.setAbsActiveJudgementsAndLines(newPropertyInfo.getAbsActiveJudgementsAndLines());
+	        }
+	        if (newPropertyInfo.getAssessementsAndTaxInfo() != null) {
+	            existingPropertyInfo.setAssessementsAndTaxInfo(newPropertyInfo.getAssessementsAndTaxInfo());
+	        }
+	        if (newPropertyInfo.getNamesrun() != null) {
+	            existingPropertyInfo.setNamesrun(newPropertyInfo.getNamesrun());
+	        }
+	        if (newPropertyInfo.getTaxinstallments() != null) {
+	            existingPropertyInfo.setTaxinstallments(newPropertyInfo.getTaxinstallments());
+	        }
+	        if (newPropertyInfo.getDasadditionalinformation() != null) {
+	            existingPropertyInfo.setDasadditionalinformation(newPropertyInfo.getDasadditionalinformation());
+	        }
+	        if (newPropertyInfo.getDaslegaldescriptioninfo() != null) {
+	            existingPropertyInfo.setDaslegaldescriptioninfo(newPropertyInfo.getDaslegaldescriptioninfo());
+	        }
 
 	        // Save the updated property info
-	        PropertyInfo updatedPropertyInfo = propertyInfoService.savePropertyInfo(existingPropertyInfo);
-
-	        // Return the updated property info
+	        PropertyInfo updatedPropertyInfo = propertyInfoService.save(existingPropertyInfo);
+	        
 	        return ResponseEntity.ok(updatedPropertyInfo);
 	    }
 	    

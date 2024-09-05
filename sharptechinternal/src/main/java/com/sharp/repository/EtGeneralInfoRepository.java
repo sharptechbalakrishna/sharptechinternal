@@ -24,6 +24,9 @@ public interface EtGeneralInfoRepository extends JpaRepository<EtGeneralInfo, St
 	 
 	 @Query("SELECT e FROM EtGeneralInfo e WHERE e.propertyAdderess LIKE %:partialAddress%")
 	    List<EtGeneralInfo> searchByAddress(@Param("partialAddress") String partialAddress);
+	 
+	 
+	 
 }
 	
 	

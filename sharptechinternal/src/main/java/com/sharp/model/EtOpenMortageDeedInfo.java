@@ -147,8 +147,4 @@ public class EtOpenMortageDeedInfo {
 	public void setIndicator(Integer indicator) {
 		this.indicator = indicator;
 	}
-    
-    
-    
-
 }

@@ -63,11 +63,4 @@ public class EtTaxInstallment {
 	public void setInstallment(String installment) {
 		this.installment = installment;
 	}
-	
-	
-	
-	
-	
-	
-	
 }

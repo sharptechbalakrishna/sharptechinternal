@@ -50,5 +50,6 @@ public interface PropertyInfoRepository extends JpaRepository<PropertyInfo, Stri
     
     PropertyInfo findByOrderNumber(String orderNumber);
     
+    
 }
 
