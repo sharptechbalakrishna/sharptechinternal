@@ -18,8 +18,6 @@ public class EtAdditionalInfo {
 	@Column(columnDefinition = "MEDIUMTEXT")
 	private String additionalInformation;
 	
-	@Column(columnDefinition = "MEDIUMTEXT")
-	private String additionalInfo;
 
 	public Long getSlno() {
 		return slno;
@@ -36,15 +34,6 @@ public class EtAdditionalInfo {
 	public void setAdditionalInformation(String additionalInformation) {
 		this.additionalInformation = additionalInformation;
 	}
-
-	public String getAdditionalInfo() {
-		return additionalInfo;
-	}
-
-	public void setAdditionalInfo(String additionalInfo) {
-		this.additionalInfo = additionalInfo;
-	}
-	
 
 
 }
